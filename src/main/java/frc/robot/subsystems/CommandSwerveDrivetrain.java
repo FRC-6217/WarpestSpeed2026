@@ -245,11 +245,12 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 m_hasAppliedOperatorPerspective = true;
             });
         }
+        if (LimelightHelpers.getTV(Constants.limelightName) == true){
+            PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(Constants.limelightName);
+            this.addVisionMeasurement(estimate.pose, estimate.timestampSeconds);
 
-        PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(Constants.limelightName);
-        this.addVisionMeasurement(estimate.pose, estimate.timestampSeconds);
-
-
+        }
+       
         SmartDashboard.putNumber("gyro angle ", getRotation3d().getAngle());
     }
 
