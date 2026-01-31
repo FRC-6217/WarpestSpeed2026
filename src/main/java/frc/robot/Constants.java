@@ -19,5 +19,6 @@ public class Constants {
       public static final double kDefaultSlow = 0.3;
   }
   
-  public static final String limelightName = "limelight-one";
+  public static final String frontLimelightName = "limelight-one";
+  public static final String backLimelightName = "limelight-twoplus";
 }

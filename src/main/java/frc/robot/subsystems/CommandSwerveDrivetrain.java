@@ -40,6 +40,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private static final double kSimLoopPeriod = 0.004; // 4 ms
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
+    public double yaw0to360;
 
     /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
     private static final Rotation2d kBlueAlliancePerspectiveRotation = Rotation2d.kZero;
@@ -180,6 +181,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
      *                                  and radians
      * @param modules                   Constants for each specific module
      */
+
     public CommandSwerveDrivetrain(
         SwerveDrivetrainConstants drivetrainConstants,
         double odometryUpdateFrequency,
@@ -187,10 +189,12 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         Matrix<N3, N1> visionStandardDeviation,
         SwerveModuleConstants<?, ?, ?>... modules
     ) {
+        
         super(drivetrainConstants, odometryUpdateFrequency, odometryStandardDeviation, visionStandardDeviation, modules);
         if (Utils.isSimulation()) {
             startSimThread();
         }
+        
     }
 
     /**
@@ -234,7 +238,19 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
          * Otherwise, only check and apply the operator perspective if the DS is disabled.
          * This ensures driving behavior doesn't change until an explicit disable event occurs during testing.
          */
+        //System.out.println(getPigeon2().getYaw().getValueAsDouble() % 360);
 
+        
+
+        if ((getPigeon2().getYaw().getValueAsDouble()) < 0) {
+            yaw0to360 = ((getPigeon2().getYaw().getValueAsDouble()) % 360) + 360;
+        } else {
+            yaw0to360 = (getPigeon2().getYaw().getValueAsDouble()) % 360;
+        }
+
+        
+
+       
         if (!m_hasAppliedOperatorPerspective || DriverStation.isDisabled()) {
             DriverStation.getAlliance().ifPresent(allianceColor -> {
                 setOperatorPerspectiveForward(
@@ -245,11 +261,23 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 m_hasAppliedOperatorPerspective = true;
             });
         }
-        if (LimelightHelpers.getTV(Constants.limelightName) == true){
-            PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(Constants.limelightName);
-            this.addVisionMeasurement(estimate.pose, estimate.timestampSeconds);
-
+        if (LimelightHelpers.getTV(Constants.frontLimelightName) == true){
+          LimelightHelpers.SetRobotOrientation(Constants.frontLimelightName, yaw0to360,0,0,0,0,0);
+          PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(Constants.frontLimelightName);
+            this.addVisionMeasurement(new Pose2d(estimate.pose.getTranslation(), getPigeon2().getRotation2d()), estimate.timestampSeconds);
         }
+
+        if (LimelightHelpers.getTV(Constants.backLimelightName) == true){
+          LimelightHelpers.SetRobotOrientation(Constants.backLimelightName, yaw0to360,0,0,0,0,0);
+          PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(Constants.backLimelightName);
+          
+            this.addVisionMeasurement(new Pose2d(estimate.pose.getTranslation(), Rotation2d.fromDegrees(yaw0to360)), estimate.timestampSeconds);
+        }
+
+    //   if (DriverStation.isDisabled()){
+    //     PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue(Constants.limelightName);
+    //     this.setPigeon(estimate.pose.getRotation().getDegrees());
+    //   }
        
         SmartDashboard.putNumber("gyro angle ", getRotation3d().getAngle());
     }
