@@ -8,6 +8,7 @@ import java.util.function.Supplier;
 
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
+import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
@@ -259,7 +260,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             });
         }
         if (LimelightHelpers.getTV(Constants.frontLimelightName) == true){
-          LimelightHelpers.SetRobotOrientation(Constants.frontLimelightName, this.getState().Pose.getRotation().getDegrees(),0,0,0,0,0);
+          LimelightHelpers.SetRobotOrientation(Constants.frontLimelightName, getPigeon2().getYaw().getValueAsDouble(),0,0,0,0,0);
           LimelightHelpers.SetIMUMode(Constants.frontLimelightName, 0);
           PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(Constants.frontLimelightName);
             this.addVisionMeasurement(estimate.pose, estimate.timestampSeconds);
