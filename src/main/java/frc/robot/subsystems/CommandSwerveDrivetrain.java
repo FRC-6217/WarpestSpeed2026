@@ -242,14 +242,11 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
         
 
-        if ((getPigeon2().getYaw().getValueAsDouble()) < 0) {
-            yaw0to360 = ((getPigeon2().getYaw().getValueAsDouble()) % 360) + 360;
-        } else {
-            yaw0to360 = (getPigeon2().getYaw().getValueAsDouble()) % 360;
-        }
-
-        
-
+        // if ((getPigeon2().getYaw().getValueAsDouble()) < 0) {
+        //     yaw0to360 = ((getPigeon2().getYaw().getValueAsDouble()) % 360) + 360;
+        // } else {
+        //     yaw0to360 = (getPigeon2().getYaw().getValueAsDouble()) % 360;
+        // }
        
         if (!m_hasAppliedOperatorPerspective || DriverStation.isDisabled()) {
             DriverStation.getAlliance().ifPresent(allianceColor -> {
@@ -262,18 +259,19 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             });
         }
         if (LimelightHelpers.getTV(Constants.frontLimelightName) == true){
-          LimelightHelpers.SetRobotOrientation(Constants.frontLimelightName, yaw0to360,0,0,0,0,0);
+          LimelightHelpers.SetRobotOrientation(Constants.frontLimelightName, this.getState().Pose.getRotation().getDegrees(),0,0,0,0,0);
+          LimelightHelpers.SetIMUMode(Constants.frontLimelightName, 0);
           PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(Constants.frontLimelightName);
-            this.addVisionMeasurement(new Pose2d(estimate.pose.getTranslation(), getPigeon2().getRotation2d()), estimate.timestampSeconds);
+            this.addVisionMeasurement(estimate.pose, estimate.timestampSeconds);
         }
 
-        if (LimelightHelpers.getTV(Constants.backLimelightName) == true){
-          LimelightHelpers.SetRobotOrientation(Constants.backLimelightName, yaw0to360,0,0,0,0,0);
-          PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(Constants.backLimelightName);
+
+        // if (LimelightHelpers.getTV(Constants.backLimelightName) == true){
+        //   LimelightHelpers.SetRobotOrientation(Constants.backLimelightName, this.getState().Pose.getRotation().getDegrees(),0,0,0,0,0);
+        //   PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(Constants.backLimelightName);
           
-            this.addVisionMeasurement(new Pose2d(estimate.pose.getTranslation(), Rotation2d.fromDegrees(yaw0to360)), estimate.timestampSeconds);
-        }
-
+        //     this.addVisionMeasurement(estimate.pose, estimate.timestampSeconds);
+        // }
     //   if (DriverStation.isDisabled()){
     //     PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue(Constants.limelightName);
     //     this.setPigeon(estimate.pose.getRotation().getDegrees());
