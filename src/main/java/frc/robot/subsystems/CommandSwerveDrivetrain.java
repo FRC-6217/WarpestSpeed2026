@@ -9,13 +9,19 @@ import java.util.function.Supplier;
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.hardware.Pigeon2;
+import com.ctre.phoenix6.swerve.SwerveDrivetrain;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.Odometry;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -38,6 +44,7 @@ import frc.robot.subsystems.LimelightHelpers.PoseEstimate;
  * https://v6.docs.ctr-electronics.com/en/stable/docs/tuner/tuner-swerve/index.html
  */
 public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Subsystem {
+    SwerveDrivetrain swerveDrivetrain;
     private static final double kSimLoopPeriod = 0.004; // 4 ms
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
@@ -116,6 +123,24 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         )
     );
 
+    //Path Planner Commands
+    public Pose2d getPose(){
+        return getState().Pose;
+    }
+
+    public void resetPose(){
+        super.resetPose(getPose());
+    }
+
+    public ChassisSpeeds getRobotRelativeSpeeds(){
+        return swerveDrivetrain.getKinematics().toChassisSpeeds(swerveDrivetrain.getState().ModuleStates);
+    }
+
+    public void driveRobotRelative(){
+        
+    }
+
+
     /* The SysId routine to test */
     private SysIdRoutine m_sysIdRoutineToApply = m_sysIdRoutineTranslation;
 
@@ -133,11 +158,16 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         SwerveDrivetrainConstants drivetrainConstants,
         SwerveModuleConstants<?, ?, ?>... modules
     ) {
+
+        
+
         super(drivetrainConstants, modules);
         if (Utils.isSimulation()) {
             startSimThread();
         }
     }
+
+
 
     /**
      * Constructs a CTRE SwerveDrivetrain using the specified constants.
@@ -259,9 +289,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 m_hasAppliedOperatorPerspective = true;
             });
         }
-        if (LimelightHelpers.getTV(Constants.frontLimelightName) == true){
+        if ((LimelightHelpers.getTV(Constants.frontLimelightName) == true) && Math.abs(getPigeon2().getAngularVelocityZDevice().getValueAsDouble()) < 360){
           LimelightHelpers.SetRobotOrientation(Constants.frontLimelightName, getPigeon2().getYaw().getValueAsDouble(),0,0,0,0,0);
-          LimelightHelpers.SetIMUMode(Constants.frontLimelightName, 0);
+          LimelightHelpers.SetIMUMode(Constants.frontLimelightName, 3);
           PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(Constants.frontLimelightName);
             this.addVisionMeasurement(estimate.pose, estimate.timestampSeconds);
         }
@@ -391,6 +421,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         case FAST:
           fastGovernor -= fastInc;
       }
-    }
+    } 
   }
+  
 }
