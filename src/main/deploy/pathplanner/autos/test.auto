@@ -5,6 +5,12 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "printWhenDone"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "go straight"

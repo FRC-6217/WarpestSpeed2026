@@ -143,7 +143,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         applyRequest(() -> pathPlannerSwerveRequest.withSpeeds(cSpeeds));
     }
 
-
     /* The SysId routine to test */
     private SysIdRoutine m_sysIdRoutineToApply = m_sysIdRoutineTranslation;
 

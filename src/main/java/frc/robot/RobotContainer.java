@@ -11,6 +11,7 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -65,7 +66,11 @@ public class RobotContainer {
         // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
 
         SmartDashboard.putData("Auto Chooser", autoChooser);
+
+
+        NamedCommands.registerCommand("printWhenDone", Commands.print("I am done with pathplanner auto"));
     }
+
 
     private void configureBindings() {
         // Note that X is defined as forward according to WPILib convention,
@@ -145,5 +150,6 @@ public class RobotContainer {
 
 
         // Build an auto chooser. This will use Commands.none() as the default option.
-        return autoChooser.getSelected();}
+        return autoChooser.getSelected();
+    }
 }
