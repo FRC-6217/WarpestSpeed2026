@@ -57,6 +57,8 @@ public class RobotContainer {
     public RobotContainer() {
         configureBindings();
 
+        NamedCommands.registerCommand("printWhenDone", Commands.print("I am done with pathplanner auto"));
+
           // Build an auto chooser. This will use Commands.none() as the default option.
         autoChooser = AutoBuilder.buildAutoChooser();
         
@@ -66,9 +68,6 @@ public class RobotContainer {
         // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
 
         SmartDashboard.putData("Auto Chooser", autoChooser);
-
-
-        NamedCommands.registerCommand("printWhenDone", Commands.print("I am done with pathplanner auto"));
     }
 
 
