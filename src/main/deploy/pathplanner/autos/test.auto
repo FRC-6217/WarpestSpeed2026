@@ -5,15 +5,15 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "printWhenDone"
+            "pathName": "go straight"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "go straight"
+            "pathName": "fun spin"
           }
         }
       ]

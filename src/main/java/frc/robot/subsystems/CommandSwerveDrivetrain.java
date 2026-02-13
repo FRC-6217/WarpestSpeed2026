@@ -351,12 +351,12 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 m_hasAppliedOperatorPerspective = true;
             });
         }
-        if ((LimelightHelpers.getTV(Constants.frontLimelightName) == true) && Math.abs(getPigeon2().getAngularVelocityZDevice().getValueAsDouble()) < 360){
-          LimelightHelpers.SetRobotOrientation(Constants.frontLimelightName, getPigeon2().getYaw().getValueAsDouble(),0,0,0,0,0);
-          LimelightHelpers.SetIMUMode(Constants.frontLimelightName, 3);
-          PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(Constants.frontLimelightName);
-            this.addVisionMeasurement(estimate.pose, estimate.timestampSeconds);
-        }
+        // if ((LimelightHelpers.getTV(Constants.frontLimelightName) == true) && Math.abs(getPigeon2().getAngularVelocityZDevice().getValueAsDouble()) < 360){
+        //   LimelightHelpers.SetRobotOrientation(Constants.frontLimelightName, getPigeon2().getYaw().getValueAsDouble(),0,0,0,0,0);
+        //   LimelightHelpers.SetIMUMode(Constants.frontLimelightName, 3);
+        //   PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(Constants.frontLimelightName);
+        //     this.addVisionMeasurement(estimate.pose, estimate.timestampSeconds);
+        // }
 
 
         // if ((LimelightHelpers.getTV(Constants.backLimelightName) == true) && Math.abs(getPigeon2().getAngularVelocityZDevice().getValueAsDouble()) < 360){
@@ -369,8 +369,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     //     PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue(Constants.limelightName);
     //     this.setPigeon(estimate.pose.getRotation().getDegrees());
     //   }
-       
-        SmartDashboard.putNumber("gyro angle ", getRotation3d().getAngle());
+
     }
 
     private void startSimThread() {
