@@ -136,7 +136,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     }
 
     public ChassisSpeeds getRobotRelativeSpeeds(){
-        return swerveDrivetrain.getKinematics().toChassisSpeeds(swerveDrivetrain.getState().ModuleStates);
+        return getState().Speeds;
     }
 
     public void driveRobotRelative(ChassisSpeeds cSpeeds){
@@ -398,7 +398,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         }
 
 
-        // if (LimelightHelpers.getTV(Constants.backLimelightName) == true){
+        // if ((LimelightHelpers.getTV(Constants.backLimelightName) == true) && Math.abs(getPigeon2().getAngularVelocityZDevice().getValueAsDouble()) < 360){
         //   LimelightHelpers.SetRobotOrientation(Constants.backLimelightName, this.getState().Pose.getRotation().getDegrees(),0,0,0,0,0);
         //   PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(Constants.backLimelightName);
           
