@@ -3,50 +3,34 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.1851069900142646,
-        "y": 2.398259629101284
+        "x": 2.897,
+        "y": 2.1394864479315263
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.5122967189728955,
-        "y": 2.048915834522112
+        "x": 2.863504992867332,
+        "y": 0.5350927246790307
       },
       "isLocked": false,
-      "linkedName": "endOfStraight"
+      "linkedName": "avery's shot"
     },
     {
       "anchor": {
-        "x": 1.0372895863052778,
-        "y": 1.1173323823109853
+        "x": 0.5326818830242506,
+        "y": 0.6515406562054205
       },
       "prevControl": {
-        "x": 1.2960627674750356,
-        "y": 0.71623395149786
-      },
-      "nextControl": {
-        "x": 0.7692699398068186,
-        "y": 1.5327628343835977
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 1.9559343794579167,
-        "y": 2.398259629101284
-      },
-      "prevControl": {
-        "x": 1.5548359486447931,
-        "y": 1.6478174037089879
+        "x": 2.318216833095578,
+        "y": 0.6774179743223976
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Outpost"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.7,
+      "waypointRelativePos": 0.0597900502053839,
       "rotationDegrees": 180.0
     }
   ],
@@ -63,13 +47,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 179.39690880561938
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 50.57685864992381
   },
   "useDefaultConstraints": true
 }

@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ResetGyro;
 import frc.robot.commands.RunMotor;
+import frc.robot.commands.ShootBall;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.MotorOpperator;
@@ -58,11 +59,14 @@ public class RobotContainer {
         configureBindings();
 
         NamedCommands.registerCommand("printWhenDone", Commands.print("I am done with pathplanner auto"));
+        NamedCommands.registerCommand("shootBall", new ShootBall(indexMotor, shooterMotor));
 
           // Build an auto chooser. This will use Commands.none() as the default option.
         autoChooser = AutoBuilder.buildAutoChooser();
         
         autoChooser.addOption("test", new PathPlannerAuto("test"));
+        autoChooser.addOption("FirstAuto", new PathPlannerAuto("FirstAuto"));
+        autoChooser.addOption("averysauto", new PathPlannerAuto("averysauto"));
 
         // Another option that allows you to specify the default auto by its name
         // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
@@ -101,12 +105,13 @@ public class RobotContainer {
         Trigger resetDriverGyro = m_driverController.button(Constants.OperatorConstants.kLeftBackButton);
 
 
-        m_driverController.x().whileTrue(new RunMotor(shooterMotor, 0.7));
-        m_driverController.y().whileTrue(new RunMotor(indexMotor, -0.5));
+        m_gameOperatorController.x().whileTrue(new RunMotor(shooterMotor, 0.8));
+        m_gameOperatorController.y().whileTrue(new RunMotor(indexMotor, -0.5));
         slowMode.onTrue(Commands.runOnce(swerveDrivetrain.governor::setSlowMode, swerveDrivetrain));
         fastMode.onTrue(Commands.runOnce(swerveDrivetrain.governor::setFastMode, swerveDrivetrain));
         reduceSpeed.onTrue(Commands.runOnce(swerveDrivetrain.governor::decrement, swerveDrivetrain));
         increaseSpeed.onTrue(Commands.runOnce(swerveDrivetrain.governor::increment, swerveDrivetrain));
+        m_driverController.povUp().whileTrue(new ShootBall(indexMotor, shooterMotor));
         
 
         resetDriverGyro.whileTrue(new ResetGyro(swerveDrivetrain));

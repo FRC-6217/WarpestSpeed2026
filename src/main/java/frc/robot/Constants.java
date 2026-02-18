@@ -21,4 +21,10 @@ public class Constants {
   
   public static final String frontLimelightName = "limelight-one";
   public static final String backLimelightName = "limelight-twoplus";
+
+  //Motor ID
+  public static final int climberMotorId = 0;
+  public static final int indexerMotorId = 0;
+  public static final int topIntakeMotorId = 0;
+  public static final int bottomIntakeMotorId =0;
 }

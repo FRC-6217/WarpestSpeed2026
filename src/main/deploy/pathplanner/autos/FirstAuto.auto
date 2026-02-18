@@ -1,0 +1,67 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "shootBall"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "startToOutpost"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 3.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "outpostToMiddleShot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shootBall"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "middleShotToUnderTrench"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 3.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "trenchToMiddleShot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shootBall"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
