@@ -8,10 +8,11 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.RobotConstants;
 
 public class Intake extends SubsystemBase {
-  TalonFX topIntakeMotor = new TalonFX(Constants.topIntakeMotorId);
-  TalonFX bottomIntakeMotor = new TalonFX(Constants.bottomIntakeMotorId);
+  TalonFX topIntakeMotor = new TalonFX(RobotConstants.topIntakeMotorId);
+  TalonFX bottomIntakeMotor = new TalonFX(RobotConstants.bottomIntakeMotorId);
 
   /** Creates a new Intake. */
   public Intake() {}
@@ -19,5 +20,20 @@ public class Intake extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+
+  public void forwardIntakeOn() {
+    topIntakeMotor.set(RobotConstants.topIntakeMotorSpeed);
+    bottomIntakeMotor.set(RobotConstants.bottomIntakeMotorSpeed);
+  }
+
+  public void backwardIntakeOn() {
+    topIntakeMotor.set(-RobotConstants.topIntakeMotorSpeed);
+    bottomIntakeMotor.set(-RobotConstants.bottomIntakeMotorSpeed);
+  }
+
+  public void stopIntake() {
+    topIntakeMotor.stopMotor();
+    bottomIntakeMotor.stopMotor();
   }
 }

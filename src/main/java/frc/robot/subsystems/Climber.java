@@ -8,9 +8,10 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.RobotConstants;
 
 public class Climber extends SubsystemBase {
-  TalonFX climberMotor = new TalonFX(Constants.climberMotorId);
+  TalonFX climberMotor = new TalonFX(RobotConstants.climberMotorId);
 
   /** Creates a new Climber. */
   public Climber() {}
@@ -20,11 +21,11 @@ public class Climber extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  public void setSpeed(double speed){
+  public void setSpeed(double speed) {
     climberMotor.set(speed);
   }
 
-  public void stop(){
-    climberMotor.set(0);
+  public void stop() {
+    climberMotor.stopMotor();
   }
 }

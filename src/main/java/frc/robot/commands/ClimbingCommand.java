@@ -10,9 +10,13 @@ import frc.robot.subsystems.Climber;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ClimbingCommand extends Command {
   Climber climber;
+  double speed;
 
   /** Creates a new ClimbingCommand. */
-  public ClimbingCommand() {
+  public ClimbingCommand(Climber climber, double speed) {
+    this.climber = climber;
+    this.speed = speed;
+    addRequirements(climber);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
