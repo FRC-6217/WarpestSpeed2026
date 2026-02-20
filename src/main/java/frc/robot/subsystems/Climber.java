@@ -28,4 +28,12 @@ public class Climber extends SubsystemBase {
   public void stop() {
     climberMotor.stopMotor();
   }
+
+  public void forward() {
+    climberMotor.set(RobotConstants.climberMotorSpeed);
+  }
+
+  public void backward() {
+    climberMotor.set(-RobotConstants.climberMotorSpeed);
+  }
 }

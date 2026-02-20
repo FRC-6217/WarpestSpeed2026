@@ -24,13 +24,14 @@ public class IndexerCommand extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    indexer.setSpeed(RobotConstants.indexerMotorSpeed);
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    if (shooter.shooterIsAtSpeed() == true)
+    indexer.setSpeed(RobotConstants.indexerMotorSpeed);
+  }
 
   // Called once the command ends or is interrupted.
   @Override
@@ -41,6 +42,6 @@ public class IndexerCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return false;
   }
 }

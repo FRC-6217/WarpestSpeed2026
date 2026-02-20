@@ -46,6 +46,7 @@ public class Shooter extends SubsystemBase {
   }
   
   public boolean shooterIsAtSpeed() {
-    return topShooterMotor.getVelocity().getValueAsDouble() * 0.60 >= RobotConstants.topShooterMotorRPM * 0.90;
+    return Math.abs(topShooterMotor.getVelocity().getValueAsDouble() * 60) >= Math.abs(RobotConstants.maxKrakenMotorSpeedRpm * RobotConstants.topShooterMotorSpeed * 0.9) 
+    && Math.abs(bottomShooterMotor.getVelocity().getValueAsDouble() * 60) >= Math.abs(RobotConstants.maxKrakenMotorSpeedRpm * RobotConstants.bottomShooterMotorSpeed * 0.9);
   }
 }

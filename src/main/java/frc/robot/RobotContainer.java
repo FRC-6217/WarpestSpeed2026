@@ -35,6 +35,7 @@ import frc.robot.commands.RunMotor;
 import frc.robot.commands.ShootBall;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
@@ -56,9 +57,10 @@ public class RobotContainer {
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
-    Intake intake = new Intake();
-    Shooter shooter = new Shooter();
-    Indexer indexer = new Indexer();
+    public final Climber climber = new Climber();
+    public final Intake intake = new Intake();
+    public final Shooter shooter = new Shooter();
+    public final Indexer indexer = new Indexer();
 
     public final MotorOpperator shooterMotor = new MotorOpperator(41);
     public final MotorOpperator indexMotor = new MotorOpperator(42);
@@ -139,6 +141,10 @@ public class RobotContainer {
         m_driverController.start().and(m_driverController.y()).whileTrue(swerveDrivetrain.sysIdQuasistatic(Direction.kForward));
         m_driverController.start().and(m_driverController.x()).whileTrue(swerveDrivetrain.sysIdQuasistatic(Direction.kReverse));
 
+        m_driverController.a().whileTrue(new IndexerCommand(indexer, shooter));
+        m_driverController.povUp().whileTrue(Commands.runOnce(climber::forward, climber)).onFalse(Commands.runOnce(climber::stop, climber));
+        m_driverController.povDown().whileTrue(Commands.runOnce(climber::forward, climber)).onFalse(Commands.runOnce(climber::stop, climber));
+
         // Reset the field-centric heading on left bumper press.
         m_driverController.leftBumper().onTrue(swerveDrivetrain.runOnce(swerveDrivetrain::seedFieldCentric));
 
@@ -150,7 +156,7 @@ public class RobotContainer {
         m_gameOperatorController.y().debounce(OperatorConstants.debounceTimeForButton).onTrue(new IntakeCommand(intake));
         m_gameOperatorController.b().whileTrue(Commands.runOnce(intake::backwardIntakeOn, intake)).onFalse(Commands.runOnce(intake::stopIntake, intake));
         m_gameOperatorController.x().debounce(OperatorConstants.debounceTimeForButton).onTrue(new ShooterCommand(shooter));
-        m_gameOperatorController.a().whileTrue(new IndexerCommand(indexer));
+        m_gameOperatorController.a().whileTrue(new IndexerCommand(indexer, shooter));
     }
 
     public Command getAutonomousCommand() {

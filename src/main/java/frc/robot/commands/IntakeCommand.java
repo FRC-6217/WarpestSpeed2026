@@ -10,7 +10,7 @@ import frc.robot.subsystems.Intake;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class IntakeCommand extends Command {
   Intake intake;
-  
+
 
   /** Creates a new IntakeCommand. */
   public IntakeCommand(Intake intake) {
@@ -36,6 +36,6 @@ public class IntakeCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return false;
   }
 }

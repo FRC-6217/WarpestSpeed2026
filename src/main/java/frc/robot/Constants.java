@@ -38,7 +38,8 @@ public class Constants {
    public static final double topShooterMotorSpeed= 0;
    public static final double bottomShooterMotorSpeed = 0;
    public static final double indexerMotorSpeed = 0;
+   public static final double climberMotorSpeed = 0;
 
-   public static final double topShooterMotorRPM = 4500;
+   public static final double maxKrakenMotorSpeedRpm = 6000;
   }
 }
