@@ -13,6 +13,7 @@ import frc.robot.Constants.RobotConstants;
 public class Shooter extends SubsystemBase {
   TalonFX topShooterMotor = new TalonFX(RobotConstants.topShooterMotorId);
   TalonFX bottomShooterMotor = new TalonFX(RobotConstants.bottomIntakeMotorId);
+  boolean runningShooter = false;
 
   /** Creates a new Shooter. */
   public Shooter() {}
@@ -27,8 +28,24 @@ public class Shooter extends SubsystemBase {
     bottomShooterMotor.set(bottomMotorSpeed);
   }
 
-  public void stop(){
+  public void stop() {
     topShooterMotor.stopMotor();
     bottomShooterMotor.stopMotor();
+  }
+
+  public void toggleShooter() {
+    if (runningShooter == true) {
+      topShooterMotor.stopMotor();
+      bottomShooterMotor.stopMotor();
+      runningShooter = false;
+    } else {
+      topShooterMotor.set(RobotConstants.topShooterMotorSpeed);
+      bottomShooterMotor.set(RobotConstants.bottomShooterMotorSpeed);
+      runningShooter = true;
+    }
+  }
+  
+  public boolean shooterIsAtSpeed() {
+    return topShooterMotor.getVelocity().getValueAsDouble() * 0.60 >= RobotConstants.topShooterMotorRPM * 0.90;
   }
 }

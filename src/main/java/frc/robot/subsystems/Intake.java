@@ -13,9 +13,11 @@ import frc.robot.Constants.RobotConstants;
 public class Intake extends SubsystemBase {
   TalonFX topIntakeMotor = new TalonFX(RobotConstants.topIntakeMotorId);
   TalonFX bottomIntakeMotor = new TalonFX(RobotConstants.bottomIntakeMotorId);
+  boolean runningForwardIntake = false;
 
   /** Creates a new Intake. */
   public Intake() {}
+
 
   @Override
   public void periodic() {
@@ -28,12 +30,24 @@ public class Intake extends SubsystemBase {
   }
 
   public void backwardIntakeOn() {
-    topIntakeMotor.set(-RobotConstants.topIntakeMotorSpeed);
-    bottomIntakeMotor.set(-RobotConstants.bottomIntakeMotorSpeed);
+    if(runningForwardIntake == false){
+      topIntakeMotor.set(-RobotConstants.topIntakeMotorSpeed);
+      bottomIntakeMotor.set(-RobotConstants.bottomIntakeMotorSpeed);
+    }
   }
 
   public void stopIntake() {
     topIntakeMotor.stopMotor();
     bottomIntakeMotor.stopMotor();
+  }
+
+  public void toggleIntake(){
+    if (runningForwardIntake == true) {
+      stopIntake();
+      runningForwardIntake = false;
+    } else {
+      forwardIntakeOn();
+      runningForwardIntake = true;
+    }
   }
 }

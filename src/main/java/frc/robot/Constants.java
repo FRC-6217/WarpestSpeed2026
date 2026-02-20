@@ -17,6 +17,7 @@ public class Constants {
       public static final double kSlowInc = 0.01;
       public static final double kDefaultFast = 1;
       public static final double kDefaultSlow = 0.3;
+      public static final double debounceTimeForButton = 0.1;
   }
   
   public static final String frontLimelightName = "limelight-one";
@@ -34,5 +35,10 @@ public class Constants {
    //Motor speed
    public static final double topIntakeMotorSpeed = 0;
    public static final double bottomIntakeMotorSpeed = 0;
+   public static final double topShooterMotorSpeed= 0;
+   public static final double bottomShooterMotorSpeed = 0;
+   public static final double indexerMotorSpeed = 0;
+
+   public static final double topShooterMotorRPM = 4500;
   }
 }

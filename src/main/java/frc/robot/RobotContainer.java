@@ -8,6 +8,8 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
+import java.lang.management.OperatingSystemMXBean;
+
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -19,17 +21,25 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.Constants.RobotConstants;
+import frc.robot.commands.IndexerCommand;
+import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ResetGyro;
 import frc.robot.commands.RunMotor;
 import frc.robot.commands.ShootBall;
+import frc.robot.commands.ShooterCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.MotorOpperator;
+import frc.robot.subsystems.Shooter;
 
 public class RobotContainer {
     private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -45,6 +55,10 @@ public class RobotContainer {
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
+
+    Intake intake = new Intake();
+    Shooter shooter = new Shooter();
+    Indexer indexer = new Indexer();
 
     public final MotorOpperator shooterMotor = new MotorOpperator(41);
     public final MotorOpperator indexMotor = new MotorOpperator(42);
@@ -104,9 +118,6 @@ public class RobotContainer {
         Trigger driverRightBack = m_driverController.button(Constants.OperatorConstants.kRightBackButton);
         Trigger resetDriverGyro = m_driverController.button(Constants.OperatorConstants.kLeftBackButton);
 
-
-        m_gameOperatorController.x().whileTrue(new RunMotor(shooterMotor, 0.8));
-        m_gameOperatorController.y().whileTrue(new RunMotor(indexMotor, -0.5));
         slowMode.onTrue(Commands.runOnce(swerveDrivetrain.governor::setSlowMode, swerveDrivetrain));
         fastMode.onTrue(Commands.runOnce(swerveDrivetrain.governor::setFastMode, swerveDrivetrain));
         reduceSpeed.onTrue(Commands.runOnce(swerveDrivetrain.governor::decrement, swerveDrivetrain));
@@ -132,6 +143,14 @@ public class RobotContainer {
         m_driverController.leftBumper().onTrue(swerveDrivetrain.runOnce(swerveDrivetrain::seedFieldCentric));
 
        swerveDrivetrain.registerTelemetry(logger::telemeterize);
+
+
+        // m_gameOperatorController.x().whileTrue(new RunMotor(shooterMotor, 0.8));
+        // m_gameOperatorController.y().whileTrue(new RunMotor(indexMotor, -0.5));
+        m_gameOperatorController.y().debounce(OperatorConstants.debounceTimeForButton).onTrue(new IntakeCommand(intake));
+        m_gameOperatorController.b().whileTrue(Commands.runOnce(intake::backwardIntakeOn, intake)).onFalse(Commands.runOnce(intake::stopIntake, intake));
+        m_gameOperatorController.x().debounce(OperatorConstants.debounceTimeForButton).onTrue(new ShooterCommand(shooter));
+        m_gameOperatorController.a().whileTrue(new IndexerCommand(indexer));
     }
 
     public Command getAutonomousCommand() {
