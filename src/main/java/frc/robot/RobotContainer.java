@@ -83,6 +83,7 @@ public class RobotContainer {
         autoChooser.addOption("test", new PathPlannerAuto("test"));
         autoChooser.addOption("FirstAuto", new PathPlannerAuto("FirstAuto"));
         autoChooser.addOption("averysauto", new PathPlannerAuto("averysauto"));
+        autoChooser.addOption("goToMiddleAndPushBall", new PathPlannerAuto("goCenterAndPushBall"));
 
         // Another option that allows you to specify the default auto by its name
         // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
@@ -151,11 +152,11 @@ public class RobotContainer {
        swerveDrivetrain.registerTelemetry(logger::telemeterize);
 
 
-        // m_gameOperatorController.x().whileTrue(new RunMotor(shooterMotor, 0.8));
-        // m_gameOperatorController.y().whileTrue(new RunMotor(indexMotor, -0.5));
-        m_gameOperatorController.y().debounce(OperatorConstants.debounceTimeForButton).onTrue(new IntakeCommand(intake));
+         m_gameOperatorController.x().whileTrue(new RunMotor(shooterMotor, 0.8));
+         m_gameOperatorController.y().whileTrue(new RunMotor(indexMotor, -0.5));
+        //m_gameOperatorController.y().debounce(OperatorConstants.debounceTimeForButton).onTrue(new IntakeCommand(intake));
         m_gameOperatorController.b().whileTrue(Commands.runOnce(intake::backwardIntakeOn, intake)).onFalse(Commands.runOnce(intake::stopIntake, intake));
-        m_gameOperatorController.x().debounce(OperatorConstants.debounceTimeForButton).onTrue(new ShooterCommand(shooter));
+        //m_gameOperatorController.x().debounce(OperatorConstants.debounceTimeForButton).onTrue(new ShooterCommand(shooter));
         m_gameOperatorController.a().whileTrue(new IndexerCommand(indexer, shooter));
     }
 

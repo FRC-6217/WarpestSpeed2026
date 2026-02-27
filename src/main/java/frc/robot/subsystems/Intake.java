@@ -5,13 +5,15 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.RobotConstants;
 
 public class Intake extends SubsystemBase {
-  TalonFX topIntakeMotor = new TalonFX(RobotConstants.topIntakeMotorId);
+  SparkMax topIntakeMotor = new SparkMax(RobotConstants.topIntakeMotorId, MotorType.kBrushless);
   TalonFX bottomIntakeMotor = new TalonFX(RobotConstants.bottomIntakeMotorId);
   boolean runningForwardIntake = false;
 
