@@ -141,7 +141,8 @@ public class RobotContainer {
         m_driverController.start().and(m_driverController.y()).whileTrue(swerveDrivetrain.sysIdQuasistatic(Direction.kForward));
         m_driverController.start().and(m_driverController.x()).whileTrue(swerveDrivetrain.sysIdQuasistatic(Direction.kReverse));
 
-        m_driverController.a().whileTrue(new IndexerCommand(indexer, shooter));
+        m_gameOperatorController.x().whileTrue(new RunMotor(shooterMotor, 0.8));
+        m_gameOperatorController.y().whileTrue(new RunMotor(indexMotor, -0.5));
         m_driverController.povUp().whileTrue(Commands.runOnce(climber::forward, climber)).onFalse(Commands.runOnce(climber::stop, climber));
         m_driverController.povDown().whileTrue(Commands.runOnce(climber::forward, climber)).onFalse(Commands.runOnce(climber::stop, climber));
 
