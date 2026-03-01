@@ -16,6 +16,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -64,6 +65,11 @@ public class RobotContainer {
 
     public final MotorOpperator shooterMotor = new MotorOpperator(41);
     public final MotorOpperator indexMotor = new MotorOpperator(42);
+    
+    public final SlewRateLimiter tranYSlewRateLimiter = new SlewRateLimiter(6.3);
+    
+    public final SlewRateLimiter tranXSlewRateLimiter = new SlewRateLimiter(6.3);
+    public final SlewRateLimiter rotSlewRateLimiter = new SlewRateLimiter(13);
 
     private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
     private final CommandXboxController m_gameOperatorController = new CommandXboxController(OperatorConstants.kOperatorControllerPort);
@@ -97,9 +103,9 @@ public class RobotContainer {
        swerveDrivetrain.setDefaultCommand(
             //swerveDrivetrain will execute this command periodically
            swerveDrivetrain.applyRequest(() ->
-                drive.withVelocityX(-m_driverController.getLeftY() * MaxSpeed * swerveDrivetrain.governor.getGovernor()) // Drive forward with negative Y (forward)
-                    .withVelocityY(-m_driverController.getLeftX() * MaxSpeed * swerveDrivetrain.governor.getGovernor()) // Drive left with negative X (left)
-                    .withRotationalRate(-m_driverController.getRightX() * MaxAngularRate * swerveDrivetrain.governor.getGovernor()) // Drive counterclockwise with negative X (left)
+                drive.withVelocityX(-tranXSlewRateLimiter.calculate(m_driverController.getLeftY() * MaxSpeed * swerveDrivetrain.governor.getGovernor())) // Drive forward with negative Y (forward)
+                    .withVelocityY(-tranYSlewRateLimiter.calculate(m_driverController.getLeftX() * MaxSpeed * swerveDrivetrain.governor.getGovernor())) // Drive left with negative X (left)
+                    .withRotationalRate(-rotSlewRateLimiter.calculate(m_driverController.getRightX() * MaxAngularRate * swerveDrivetrain.governor.getGovernor())) // Drive counterclockwise with negative X (left)
             )
         );
 
