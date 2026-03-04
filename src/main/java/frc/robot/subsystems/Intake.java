@@ -5,11 +5,11 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants.RobotConstants;
 
 public class Intake extends SubsystemBase {
@@ -18,17 +18,23 @@ public class Intake extends SubsystemBase {
   boolean runningForwardIntake = false;
 
   /** Creates a new Intake. */
-  public Intake() {}
+  public Intake() {
+    SmartDashboard.putNumber("Top intake speed ", RobotConstants.topIntakeMotorSpeed);
+    SmartDashboard.putNumber("Bottom intake speed ", RobotConstants.bottomIntakeMotorSpeed);
+  }
 
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putBoolean("Intake is running ", runningForwardIntake);
   }
 
   public void forwardIntakeOn() {
-    topIntakeMotor.set(RobotConstants.topIntakeMotorSpeed);
-    bottomIntakeMotor.set(RobotConstants.bottomIntakeMotorSpeed);
+    // topIntakeMotor.set(RobotConstants.topIntakeMotorSpeed);
+    // bottomIntakeMotor.set(RobotConstants.bottomIntakeMotorSpeed);
+    topIntakeMotor.set(SmartDashboard.getNumber("Top intake speed ", RobotConstants.topIntakeMotorSpeed));
+    bottomIntakeMotor.set(SmartDashboard.getNumber("Bottom intake speed ", RobotConstants.bottomIntakeMotorSpeed));
   }
 
   public void backwardIntakeOn() {
@@ -43,12 +49,11 @@ public class Intake extends SubsystemBase {
     bottomIntakeMotor.stopMotor();
   }
 
+
   public void toggleIntake(){
     if (runningForwardIntake == true) {
-      stopIntake();
       runningForwardIntake = false;
     } else {
-      forwardIntakeOn();
       runningForwardIntake = true;
     }
   }

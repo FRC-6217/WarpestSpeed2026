@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.RobotConstants;
@@ -14,7 +15,9 @@ public class Indexer extends SubsystemBase {
   TalonFX indexerMotor = new TalonFX(RobotConstants.indexerMotorId);
 
   /** Creates a new Indexer. */
-  public Indexer() {}
+  public Indexer() {
+    SmartDashboard.putNumber("IndexerSpeed ", RobotConstants.indexerMotorSpeed);
+  }
 
   @Override
   public void periodic() {
@@ -23,6 +26,10 @@ public class Indexer extends SubsystemBase {
 
   public void setSpeed(double speed) {
     indexerMotor.set(speed);
+  }
+
+  public void startIndexer() {
+    indexerMotor.set(SmartDashboard.getNumber("IndexerSpeed ", 0));
   }
   
   public void stop() {

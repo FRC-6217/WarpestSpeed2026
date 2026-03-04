@@ -26,20 +26,25 @@ public class Constants {
   public class RobotConstants {
    //Motor id
    public static final int climberMotorId = 0;
-   public static final int indexerMotorId = 0;
-   public static final int topIntakeMotorId = 0;
-   public static final int bottomIntakeMotorId =0;
-   public static final int topShooterMotorId = 0;
-   public static final int bottomShooterMotorId = 0;
+   public static final int indexerMotorId = 34;
+   public static final int topIntakeMotorId = 30;
+   public static final int bottomIntakeMotorId = 35;
+   public static final int topShooterMotorId = 15;
+   public static final int bottomShooterMotorId = 16;
 
    //Motor speed
-   public static final double topIntakeMotorSpeed = 0;
-   public static final double bottomIntakeMotorSpeed = 0;
-   public static final double topShooterMotorSpeed= 0;
-   public static final double bottomShooterMotorSpeed = 0;
-   public static final double indexerMotorSpeed = 0;
+   public static final double topIntakeMotorSpeed = 0.1;
+   public static final double bottomIntakeMotorSpeed = 0.1;
+   public static final double topShooterMotorSpeed= 0.1;
+   public static final double bottomShooterMotorSpeed = 0.1;
+   public static final double indexerMotorSpeed = 0.1;
    public static final double climberMotorSpeed = 0;
 
    public static final double maxKrakenMotorSpeedRpm = 6000;
   }
+
+   public static final double blueHubX = 4.634;
+   public static final double blueHubY = 4.029;
+   public static final double redHubX = 11.919;
+   public static final double redHubY = 4.029;
 }

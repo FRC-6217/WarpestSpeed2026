@@ -14,7 +14,7 @@ import frc.robot.subsystems.LimelightHelpers;
 
 public class Robot extends TimedRobot {
     private Command m_autonomousCommand;
-    boolean kUseLimelight = false;
+    boolean kUseLimelight = true;
 
     private final RobotContainer m_robotContainer;
 

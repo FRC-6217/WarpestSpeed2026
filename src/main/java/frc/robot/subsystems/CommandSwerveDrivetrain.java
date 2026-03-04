@@ -49,6 +49,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private double m_lastSimTime;
     public double yaw0to360;
     public RobotConfig config;
+    public double direction;
 
     /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
     private static final Rotation2d kBlueAlliancePerspectiveRotation = Rotation2d.kZero;
@@ -435,6 +436,17 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public void setPigeon(double angle){
         resetRotation(new Rotation2d(angle));
         getPigeon2().setYaw(angle);
+    }
+
+    public double allignedAngle(){
+       if(DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) {
+      direction = Math.toDegrees(Math.atan((this.getPose().getY() - Constants.blueHubY)/(this.getPose().getX() - Constants.blueHubX)));
+    } else if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
+      direction = Math.toDegrees(Math.atan(this.getPose().getY() - Constants.redHubY)/(this.getPose().getX() - Constants.redHubX));
+      
+    }
+    direction = Math.toRadians(direction);
+    return direction;
     }
 
 
