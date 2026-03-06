@@ -10,6 +10,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.LimelightHelpers;
 
 public class Robot extends TimedRobot {
@@ -51,7 +52,9 @@ public class Robot extends TimedRobot {
     }
 
     @Override
-    public void disabledInit() {}
+    public void disabledInit() {
+        Commands.runOnce(m_robotContainer.shooter::stop, m_robotContainer.shooter);
+    }
 
     @Override
     public void disabledPeriodic() {
@@ -74,13 +77,16 @@ public class Robot extends TimedRobot {
     public void autonomousPeriodic() {}
 
     @Override
-    public void autonomousExit() {}
+    public void autonomousExit() {
+        Commands.runOnce(m_robotContainer.shooter::stop, m_robotContainer.shooter);
+    }
 
     @Override
     public void teleopInit() {
         if (m_autonomousCommand != null) {
             CommandScheduler.getInstance().cancel(m_autonomousCommand);
         }
+        Commands.runOnce(m_robotContainer.shooter::stop, m_robotContainer.shooter);
     }
 
     @Override

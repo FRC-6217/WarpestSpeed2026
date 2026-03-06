@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.RobotConstants;
@@ -14,7 +15,9 @@ public class Climber extends SubsystemBase {
   TalonFX climberMotor = new TalonFX(RobotConstants.climberMotorId);
 
   /** Creates a new Climber. */
-  public Climber() {}
+  public Climber() {
+    SmartDashboard.putNumber("ClimberSpeed ", RobotConstants.climberMotorSpeed);
+  }
 
   @Override
   public void periodic() {
@@ -30,10 +33,12 @@ public class Climber extends SubsystemBase {
   }
 
   public void forward() {
-    climberMotor.set(RobotConstants.climberMotorSpeed);
+    //climberMotor.set(RobotConstants.climberMotorSpeed);
+    climberMotor.set(SmartDashboard.getNumber("ClimberSpeed ", 0));
   }
 
   public void backward() {
-    climberMotor.set(-RobotConstants.climberMotorSpeed);
+    //climberMotor.set(-RobotConstants.climberMotorSpeed);
+    climberMotor.set(-SmartDashboard.getNumber("ClimberSpeed ", 0));
   }
 }

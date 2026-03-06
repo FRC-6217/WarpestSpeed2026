@@ -19,13 +19,19 @@ public class Shooter extends SubsystemBase {
   PIDController bottomPIDController = new PIDController(0, 0, 0);
   double topShooterMotorP = 0;
   double bottomShooterMotorP = 0;
+  double topShooterMotorI = 0;
+  double bottomShooterMotorI = 0;
+
   /** Creates a new Shooter. */
   public Shooter() {
     SmartDashboard.putNumber("Top shooter speed ", RobotConstants.topShooterMotorSpeed);
     SmartDashboard.putNumber("Bottom shooter speed ", RobotConstants.bottomShooterMotorSpeed);
 
-    SmartDashboard.putNumber("Top Shooter P ", 0);
-    SmartDashboard.putNumber("Bottom Shooter P ", 0);
+    SmartDashboard.putNumber("Top Shooter P ", 0.0012);
+    SmartDashboard.putNumber("Bottom Shooter P ", 0.0012);
+
+    SmartDashboard.putNumber("Top Shooter I ", 0.0045);
+    SmartDashboard.putNumber("Bottom Shooter I ", 0.0045);
   }
 
   @Override
@@ -46,6 +52,16 @@ public class Shooter extends SubsystemBase {
       bottomPIDController.setP(bottomShooterMotorP);
     }
 
+    if (SmartDashboard.getNumber("Top Shooter I ", 0) != topShooterMotorI) {
+      topShooterMotorI = SmartDashboard.getNumber("Top Shooter I ", 0);
+      topPIDController.setI(topShooterMotorI);
+    }
+
+    if (SmartDashboard.getNumber("Bottom Shooter I ", 0) != bottomShooterMotorI) {
+      bottomShooterMotorI = SmartDashboard.getNumber("Bottom Shooter I ", 0);
+      bottomPIDController.setI(bottomShooterMotorI);
+    }
+
     if (runningShooter == true) {
       double topPIDOutput = topPIDController.calculate(topShooterMotor.getVelocity().getValueAsDouble());
       topShooterMotor.set(topPIDOutput);
@@ -62,7 +78,7 @@ public class Shooter extends SubsystemBase {
     }
 
     if (SmartDashboard.getNumber("Bottom shooter speed ", 0) !=  bottomPIDController.getSetpoint()) {
-      bottomPIDController.setSetpoint(SmartDashboard.getNumber("Top shooter speed ", 0));
+      bottomPIDController.setSetpoint(SmartDashboard.getNumber("Bottom shooter speed ", 0));
     }
   }
 

@@ -8,8 +8,6 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
-import java.lang.management.OperatingSystemMXBean;
-
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -22,21 +20,19 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.Constants.RobotConstants;
-import frc.robot.commands.AlinedDrive;
+import frc.robot.commands.ClimbingCommand;
 import frc.robot.commands.IndexerCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ResetGyro;
-import frc.robot.commands.RunMotor;
 import frc.robot.commands.ShootBall;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.Agitator;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Indexer;
@@ -64,6 +60,7 @@ public class RobotContainer {
     public final Intake intake = new Intake();
     public final Shooter shooter = new Shooter();
     public final Indexer indexer = new Indexer();
+    public final Agitator agitator = new Agitator();
 
     public final MotorOpperator shooterMotor = new MotorOpperator(41);
     public final MotorOpperator indexMotor = new MotorOpperator(42);
@@ -90,16 +87,27 @@ public class RobotContainer {
     public RobotContainer() {
         configureBindings();
 
-        NamedCommands.registerCommand("printWhenDone", Commands.print("I am done with pathplanner auto"));
-        NamedCommands.registerCommand("shootBall", new ShootBall(indexMotor, shooterMotor));
+        //NamedCommands.registerCommand("printWhenDone", Commands.print("I am done with pathplanner auto"));
+        //NamedCommands.registerCommand("shootBall", new ShootBall(indexMotor, shooterMotor));
+        NamedCommands.registerCommand("intakeFuel", Commands.runOnce(intake::forwardIntakeOn, intake));
+        NamedCommands.registerCommand("stopIntake", Commands.runOnce(intake::stopIntake, intake));
+        NamedCommands.registerCommand("shootBall", Commands.runOnce(indexer::startIndexer, indexer));
+        NamedCommands.registerCommand("stopShootBall", Commands.runOnce(indexer::stop, indexer));
+        NamedCommands.registerCommand("startShooter", Commands.runOnce(shooter::startShooter, shooter));
+        NamedCommands.registerCommand("stopShooter", Commands.runOnce(shooter::stop, shooter));
+        NamedCommands.registerCommand("climb", new ClimbingCommand(climber));
 
           // Build an auto chooser. This will use Commands.none() as the default option.
         autoChooser = AutoBuilder.buildAutoChooser();
         
-        autoChooser.addOption("test", new PathPlannerAuto("test"));
-        autoChooser.addOption("FirstAuto", new PathPlannerAuto("FirstAuto"));
+        //autoChooser.addOption("test", new PathPlannerAuto("test"));
+        //autoChooser.addOption("FirstAuto", new PathPlannerAuto("FirstAuto"));
         autoChooser.addOption("averysauto", new PathPlannerAuto("averysauto"));
-        autoChooser.addOption("goToMiddleAndPushBall", new PathPlannerAuto("goCenterAndPushBall"));
+        //autoChooser.addOption("goToMiddleAndPushBall", new PathPlannerAuto("goCenterAndPushBall"));
+        autoChooser.addOption("OutpostSideToMiddleAndBack", new PathPlannerAuto("OutpostSideToMiddleAndBack"));
+        autoChooser.addOption("DepotSideToMiddleAndBack", new PathPlannerAuto("DepotSideToMiddleAndBack"));
+        autoChooser.addOption("DepotSideStraightToMiddle", new PathPlannerAuto("DepotSideStraightToMiddle"));
+        autoChooser.addOption("OutpostSideStraightToMiddle", new PathPlannerAuto("OutpostSideStraightToMiddle"));
 
         // Another option that allows you to specify the default auto by its name
         // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
@@ -167,7 +175,7 @@ public class RobotContainer {
 
         
         m_driverController.povUp().whileTrue(Commands.runOnce(climber::forward, climber)).onFalse(Commands.runOnce(climber::stop, climber));
-        m_driverController.povDown().whileTrue(Commands.runOnce(climber::forward, climber)).onFalse(Commands.runOnce(climber::stop, climber));
+        m_driverController.povDown().whileTrue(Commands.runOnce(climber::backward, climber)).onFalse(Commands.runOnce(climber::stop, climber));
 
         // Reset the field-centric heading on left bumper press.
        
@@ -179,7 +187,7 @@ public class RobotContainer {
          //m_gameOperatorController.y().whileTrue(new RunMotor(indexMotor, -0.5));
         m_gameOperatorController.y().toggleOnTrue(new IntakeCommand(intake));
         m_gameOperatorController.b().whileTrue(Commands.runOnce(intake::backwardIntakeOn, intake)).onFalse(Commands.runOnce(intake::stopIntake, intake));
-        m_gameOperatorController.x().toggleOnTrue(new ShooterCommand(shooter));
+        m_gameOperatorController.x().toggleOnTrue(new ShooterCommand(shooter,agitator));
         m_gameOperatorController.a().whileTrue(new IndexerCommand(indexer, shooter));
     }
 

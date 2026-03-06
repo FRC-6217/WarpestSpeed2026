@@ -4,6 +4,10 @@
 
 package frc.robot.commands;
 
+import java.lang.reflect.Parameter;
+
+import com.fasterxml.jackson.databind.deser.impl.CreatorCandidate.Param;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake;
 
@@ -34,6 +38,7 @@ public class IntakeCommand extends Command {
   public void end(boolean interrupted) {
     intake.stopIntake();
     intake.toggleIntake();
+    System.out.println("intake was interupted:" + interrupted);
   }
 
   // Returns true when the command should end.

@@ -28,6 +28,7 @@ public class Intake extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putBoolean("Intake is running ", runningForwardIntake);
+    SmartDashboard.putNumber("Top intake amp", topIntakeMotor.getOutputCurrent());
   }
 
   public void forwardIntakeOn() {

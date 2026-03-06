@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.502895863052782,
-        "y": 2.294750356633382
+        "x": 8.580527817403707,
+        "y": 0.6903566333808839
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.02416547788873,
-        "y": 1.3890442225392303
+        "x": 7.480741797432238,
+        "y": 0.36689015691868665
       },
       "isLocked": false,
       "linkedName": "MiddleOfOutpostSideCenter"
@@ -48,7 +48,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -45.00000000000012
+    "rotation": 30.465544919459838
   },
   "useDefaultConstraints": true
 }
