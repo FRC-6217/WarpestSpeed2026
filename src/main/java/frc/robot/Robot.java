@@ -51,9 +51,13 @@ public class Robot extends TimedRobot {
     }
     }
 
+    public void cancelAll() {
+        CommandScheduler.getInstance().cancelAll();
+    }
+
     @Override
     public void disabledInit() {
-        Commands.runOnce(m_robotContainer.shooter::stop, m_robotContainer.shooter);
+    
     }
 
     @Override
@@ -78,19 +82,25 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousExit() {
-        Commands.runOnce(m_robotContainer.shooter::stop, m_robotContainer.shooter);
+        
     }
+
 
     @Override
     public void teleopInit() {
         if (m_autonomousCommand != null) {
             CommandScheduler.getInstance().cancel(m_autonomousCommand);
+            CommandScheduler.getInstance().schedule(Commands.runOnce(m_robotContainer.shooter:: stop, m_robotContainer.shooter));
         }
-        Commands.runOnce(m_robotContainer.shooter::stop, m_robotContainer.shooter);
+        
     }
 
     @Override
-    public void teleopPeriodic() {}
+    public void teleopPeriodic() {
+        if (m_robotContainer.m_driverController.a().getAsBoolean()) {
+            CommandScheduler.getInstance().cancelAll();
+        }
+    }
 
     @Override
     public void teleopExit() {}

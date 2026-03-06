@@ -19,6 +19,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
@@ -45,6 +46,7 @@ public class RobotContainer {
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
 
     private final SendableChooser<Command> autoChooser;
+   
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -69,7 +71,7 @@ public class RobotContainer {
     public final SlewRateLimiter tranYSlewRateLimiter = new SlewRateLimiter(6.3);
     public final SlewRateLimiter rotSlewRateLimiter = new SlewRateLimiter(13);
 
-    private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
+    public final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
     private final CommandXboxController m_gameOperatorController = new CommandXboxController(OperatorConstants.kOperatorControllerPort);
 
 
@@ -91,7 +93,7 @@ public class RobotContainer {
         //NamedCommands.registerCommand("shootBall", new ShootBall(indexMotor, shooterMotor));
         NamedCommands.registerCommand("intakeFuel", Commands.runOnce(intake::forwardIntakeOn, intake));
         NamedCommands.registerCommand("stopIntake", Commands.runOnce(intake::stopIntake, intake));
-        NamedCommands.registerCommand("shootBall", Commands.runOnce(indexer::startIndexer, indexer));
+        NamedCommands.registerCommand("shootBall", new ShootBall(indexer, shooter));
         NamedCommands.registerCommand("stopShootBall", Commands.runOnce(indexer::stop, indexer));
         NamedCommands.registerCommand("startShooter", Commands.runOnce(shooter::startShooter, shooter));
         NamedCommands.registerCommand("stopShooter", Commands.runOnce(shooter::stop, shooter));
@@ -108,6 +110,7 @@ public class RobotContainer {
         autoChooser.addOption("DepotSideToMiddleAndBack", new PathPlannerAuto("DepotSideToMiddleAndBack"));
         autoChooser.addOption("DepotSideStraightToMiddle", new PathPlannerAuto("DepotSideStraightToMiddle"));
         autoChooser.addOption("OutpostSideStraightToMiddle", new PathPlannerAuto("OutpostSideStraightToMiddle"));
+        autoChooser.addOption("MiddleToDepot", new PathPlannerAuto("MiddleToDepot"));
 
         // Another option that allows you to specify the default auto by its name
         // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
@@ -151,12 +154,10 @@ public class RobotContainer {
         fastMode.onTrue(Commands.runOnce(swerveDrivetrain.governor::setFastMode, swerveDrivetrain));
         reduceSpeed.onTrue(Commands.runOnce(swerveDrivetrain.governor::decrement, swerveDrivetrain));
         increaseSpeed.onTrue(Commands.runOnce(swerveDrivetrain.governor::increment, swerveDrivetrain));
-        m_driverController.povUp().whileTrue(new ShootBall(indexMotor, shooterMotor));
         
 
         resetDriverGyro.whileTrue(new ResetGyro(swerveDrivetrain));
-
-        m_driverController.a().whileTrue(swerveDrivetrain.applyRequest(() -> brake));
+        
         m_driverController.b().whileTrue(swerveDrivetrain.applyRequest(() ->
             point.withModuleDirection(new Rotation2d(-m_driverController.getLeftY(), -m_driverController.getLeftX()))
         ));
@@ -185,7 +186,7 @@ public class RobotContainer {
 
          //m_gameOperatorController.x().whileTrue(new RunMotor(shooterMotor, 0.8));
          //m_gameOperatorController.y().whileTrue(new RunMotor(indexMotor, -0.5));
-        m_gameOperatorController.y().toggleOnTrue(new IntakeCommand(intake));
+        m_gameOperatorController.y().whileTrue(new IntakeCommand(intake));
         m_gameOperatorController.b().whileTrue(Commands.runOnce(intake::backwardIntakeOn, intake)).onFalse(Commands.runOnce(intake::stopIntake, intake));
         m_gameOperatorController.x().toggleOnTrue(new ShooterCommand(shooter,agitator));
         m_gameOperatorController.a().whileTrue(new IndexerCommand(indexer, shooter));

@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.897,
-        "y": 2.1394864479315263
+        "x": 2.124136947218259,
+        "y": 2.2559343794579183
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.863504992867332,
-        "y": 0.5350927246790307
+        "x": 2.0906419400855913,
+        "y": 0.6515406562054227
       },
       "isLocked": false,
       "linkedName": "avery's shot"
@@ -53,7 +53,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 50.57685864992381
+    "rotation": 35.36883020753999
   },
   "useDefaultConstraints": true
 }

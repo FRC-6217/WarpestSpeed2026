@@ -34,13 +34,13 @@ public class Constants {
    public static final int agitatorMotorId = 36;
 
    //Motor speed
-   public static final double topIntakeMotorSpeed = -0.5;
-   public static final double bottomIntakeMotorSpeed = 0.3;
+   public static final double topIntakeMotorSpeed = -1;
+   public static final double bottomIntakeMotorSpeed = 0.6;
    public static final double topShooterMotorSpeed= -45;
    public static final double bottomShooterMotorSpeed = 92;
    public static final double indexerMotorSpeed = -0.5;
    public static final double climberMotorSpeed = -0.5;
-   public static final double agitatorMotorSpeed = 0.1;
+   public static final double agitatorMotorSpeed = 0.4;
 
    public static final double maxKrakenMotorSpeedRpm = 6000;
   }

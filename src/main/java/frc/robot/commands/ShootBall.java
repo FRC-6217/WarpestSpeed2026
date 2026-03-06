@@ -7,19 +7,24 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.Robot;
+import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.MotorOpperator;
+import frc.robot.subsystems.Shooter;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ShootBall extends Command {
   /** Creates a new ShootBall. */
-  MotorOpperator indexMotor;
-  MotorOpperator shooterMotor;
+  Indexer indexMotor;
+  Shooter shooterMotor;
+  boolean timerStarted = true;
   private static Timer timer = new Timer();
 
-  public ShootBall(MotorOpperator indexMotor, MotorOpperator shooterMotor) {
+  public ShootBall(Indexer indexMotor, Shooter shooterMotor) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.indexMotor = indexMotor;
     this.shooterMotor = shooterMotor;
+    addRequirements(shooterMotor, indexMotor);
   }
 
   // Called when the command is initially scheduled.
@@ -27,15 +32,15 @@ public class ShootBall extends Command {
   public void initialize() {
     timer.reset();
     timer.start();
+    timerStarted = true;
+    shooterMotor.startShooter();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooterMotor.setSpeed(.8);
-
-    if(timer.hasElapsed(1.5)){
-      indexMotor.setSpeed(-0.5);
+    if(shooterMotor.shooterIsAtSpeed()){
+      indexMotor.startIndexer();;
     }
   }
 
@@ -49,6 +54,6 @@ public class ShootBall extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return timer.hasElapsed(4);
+    return timer.hasElapsed(6);
   }
 }

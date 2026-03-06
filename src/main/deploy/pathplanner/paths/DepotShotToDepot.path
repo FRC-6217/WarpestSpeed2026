@@ -3,32 +3,37 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.5326818830242506,
-        "y": 0.6515406562054205
+        "x": 1.8136091298145498,
+        "y": 5.7234950071326685
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.5326818830242506,
-        "y": 0.6515406562054205
+        "x": 1.5133919729489458,
+        "y": 5.934226537990904
       },
       "isLocked": false,
-      "linkedName": "Outpost"
+      "linkedName": "DepotShot"
     },
     {
       "anchor": {
-        "x": 2.124136947218259,
-        "y": 2.2559343794579183
+        "x": 0.5585592011412266,
+        "y": 5.982268188302426
       },
       "prevControl": {
-        "x": 2.395848787446504,
-        "y": 1.2467189728958634
+        "x": 1.2206867327230584,
+        "y": 5.927430543635448
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "avery's shot"
+      "linkedName": "Depot"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.27395934172314285,
+      "rotationDegrees": 90.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -42,13 +47,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 35.36883020753999
+    "rotation": 86.39872188277656
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 179.39690880561938
+    "rotation": -30.305213354509917
   },
   "useDefaultConstraints": true
 }

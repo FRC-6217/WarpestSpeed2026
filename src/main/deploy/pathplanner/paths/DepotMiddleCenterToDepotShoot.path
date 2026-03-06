@@ -3,16 +3,32 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.528773181169758,
-        "y": 7.133808844507846
+        "x": 8.25706134094151,
+        "y": 7.120870185449359
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.772838801711839,
-        "y": 7.509029957203994
+        "x": 6.160998573466475,
+        "y": 7.547845934379458
       },
       "isLocked": false,
       "linkedName": "MiddleOfDepotSideCenter"
+    },
+    {
+      "anchor": {
+        "x": 4.49191155492154,
+        "y": 7.53490727532097
+      },
+      "prevControl": {
+        "x": 5.177660485021397,
+        "y": 7.521968616262482
+      },
+      "nextControl": {
+        "x": 4.101820707377065,
+        "y": 7.5422674799916205
+      },
+      "isLocked": false,
+      "linkedName": null
     },
     {
       "anchor": {
@@ -30,7 +46,11 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.45788964181993813,
+      "waypointRelativePos": 0.6060019361084247,
+      "rotationDegrees": -90.0
+    },
+    {
+      "waypointRelativePos": 1.3533397870280743,
       "rotationDegrees": -90.0
     }
   ],
