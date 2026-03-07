@@ -27,6 +27,9 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Top shooter speed ", RobotConstants.topShooterMotorSpeed);
     SmartDashboard.putNumber("Bottom shooter speed ", RobotConstants.bottomShooterMotorSpeed);
 
+    SmartDashboard.putNumber("Top Shooter Test", RobotConstants.topShooterMotorSpeed/100);
+    SmartDashboard.putNumber("Bottom Shooter Test", RobotConstants.bottomShooterMotorSpeed/100);
+
     SmartDashboard.putNumber("Top Shooter P ", 0.0012);
     SmartDashboard.putNumber("Bottom Shooter P ", 0.0012);
 
@@ -62,7 +65,7 @@ public class Shooter extends SubsystemBase {
       bottomPIDController.setI(bottomShooterMotorI);
     }
 
-    if (runningShooter == true) {
+    if (false == true) {
       double topPIDOutput = topPIDController.calculate(topShooterMotor.getVelocity().getValueAsDouble());
       topShooterMotor.set(topPIDOutput);
 
@@ -85,10 +88,15 @@ public class Shooter extends SubsystemBase {
   public void setTargetSpeed(double topMotorSpeed, double bottomMotorSpeed) {
     bottomPIDController.setSetpoint(bottomMotorSpeed);
     topPIDController.setSetpoint(topMotorSpeed);
+
   }
 
   public void startShooter() {
-    runningShooter = true;
+    //runningShooter = true;
+    //topShooterMotor.set(SmartDashboard.getNumber("Top Shooter Test", RobotConstants.topShooterMotorSpeed/100));
+    //bottomShooterMotor.set(SmartDashboard.getNumber("Bottom Shooter Test", RobotConstants.bottomIntakeMotorSpeed/100));
+    topShooterMotor.set(-0.4);
+    bottomShooterMotor.set(0.92);
   }
 
   public void stop() {

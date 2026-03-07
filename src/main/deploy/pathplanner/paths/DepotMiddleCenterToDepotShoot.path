@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.25706134094151,
-        "y": 7.120870185449359
+        "x": 7.5066191155492135,
+        "y": 7.302011412261777
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.160998573466475,
-        "y": 7.547845934379458
+        "x": 5.410556348074179,
+        "y": 7.728987161191876
       },
       "isLocked": false,
       "linkedName": "MiddleOfDepotSideCenter"

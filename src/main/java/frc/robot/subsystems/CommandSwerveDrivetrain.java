@@ -449,6 +449,12 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     return direction;
     }
 
+    // public double distanceToHub() {
+    //   if(DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) {
+    //   distance = Math.sqrt(Math.pow((this.getPose().getY() - Constants.blueHubY),2) /(this.getPose().getX() - Constants.blueHubX));
+    // } else if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
+    //   distance = Math.toDegrees(Math.atan(this.getPose().getY() - Constants.redHubY)/(this.getPose().getX() - Constants.redHubX));
+    // }
 
     public class Governor{
         public enum MODE {SLOW, FAST};

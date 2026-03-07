@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Robot;
+import frc.robot.subsystems.Agitator;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.MotorOpperator;
 import frc.robot.subsystems.Shooter;
@@ -17,14 +18,16 @@ public class ShootBall extends Command {
   /** Creates a new ShootBall. */
   Indexer indexMotor;
   Shooter shooterMotor;
+  Agitator agitator;
   boolean timerStarted = true;
   private static Timer timer = new Timer();
 
-  public ShootBall(Indexer indexMotor, Shooter shooterMotor) {
+  public ShootBall(Indexer indexMotor, Shooter shooterMotor, Agitator agitator) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.indexMotor = indexMotor;
     this.shooterMotor = shooterMotor;
-    addRequirements(shooterMotor, indexMotor);
+    this.agitator = agitator;
+    addRequirements(shooterMotor, indexMotor, agitator);
   }
 
   // Called when the command is initially scheduled.
@@ -40,8 +43,10 @@ public class ShootBall extends Command {
   @Override
   public void execute() {
     if(shooterMotor.shooterIsAtSpeed()){
-      indexMotor.startIndexer();;
+      indexMotor.startIndexer();
     }
+    shooterMotor.startShooter();
+    agitator.startAgitator();
   }
 
   // Called once the command ends or is interrupted.
@@ -54,6 +59,6 @@ public class ShootBall extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return timer.hasElapsed(6);
+    return timer.hasElapsed(5);
   }
 }

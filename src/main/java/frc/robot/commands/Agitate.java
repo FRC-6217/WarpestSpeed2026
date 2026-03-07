@@ -4,41 +4,44 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Agitator;
-import frc.robot.subsystems.Shooter;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class ShooterCommand extends Command {
-  Shooter shooter;
+public class Agitate extends Command {
   Agitator agitator;
-
-  /** Creates a new ShooterCommand. */
-  public ShooterCommand(Shooter shooter, Agitator agitator) {
-    this.shooter = shooter;
+  Timer timer = new Timer();
+  /** Creates a new Agitate. */
+  public Agitate(Agitator agitator) {
     this.agitator = agitator;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(shooter, agitator);
+    addRequirements(agitator);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shooter.startShooter();
-    agitator.startAgitator();
+    timer.reset();
+    timer.start();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
- shooter.startShooter();
-  agitator.startAgitator();
+    if(timer.get() <= 1) {
+      agitator.startAgitator();
+    } else if (timer.get() < 2){
+      agitator.backwardAgitator();
+    } else if (timer.get() >= 2) {
+      timer.reset();
+      timer.start();
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    shooter.stop();
     agitator.stopAgitator();
   }
 

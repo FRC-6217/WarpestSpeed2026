@@ -31,6 +31,10 @@ public class Indexer extends SubsystemBase {
   public void startIndexer() {
     indexerMotor.set(SmartDashboard.getNumber("IndexerSpeed ", 0));
   }
+
+  public void backwardIndexer() {
+    indexerMotor.set(-SmartDashboard.getNumber("IndexerSpeed ", 0));
+  }
   
   public void stop() {
     indexerMotor.stopMotor();

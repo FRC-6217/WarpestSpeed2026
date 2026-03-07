@@ -36,7 +36,7 @@ public class Constants {
    //Motor speed
    public static final double topIntakeMotorSpeed = -1;
    public static final double bottomIntakeMotorSpeed = 0.6;
-   public static final double topShooterMotorSpeed= -45;
+   public static final double topShooterMotorSpeed= -40;
    public static final double bottomShooterMotorSpeed = 92;
    public static final double indexerMotorSpeed = -0.5;
    public static final double climberMotorSpeed = -0.5;

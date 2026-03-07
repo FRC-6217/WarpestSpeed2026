@@ -25,6 +25,10 @@ public class Agitator extends SubsystemBase {
     agitatorMotor.set(RobotConstants.agitatorMotorSpeed);
   }
 
+  public void backwardAgitator() {
+    agitatorMotor.set(-RobotConstants.agitatorMotorSpeed);
+  }
+
   public void stopAgitator() {
     agitatorMotor.stopMotor();
   }
