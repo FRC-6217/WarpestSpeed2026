@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.pathplanner.lib.config.RobotConfig;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 
@@ -13,14 +14,14 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.RobotConstants;
 
 public class Intake extends SubsystemBase {
-  SparkMax topIntakeMotor = new SparkMax(RobotConstants.topIntakeMotorId, MotorType.kBrushless);
-  TalonFX bottomIntakeMotor = new TalonFX(RobotConstants.bottomIntakeMotorId);
+  TalonFX intakeMotor = new TalonFX(RobotConstants.intakeMotorId);
+  TalonFX intakeMoverMotor = new TalonFX(RobotConstants.intakeMoverMotorId);
   boolean runningForwardIntake = false;
 
   /** Creates a new Intake. */
   public Intake() {
-    SmartDashboard.putNumber("Top intake speed ", RobotConstants.topIntakeMotorSpeed);
-    SmartDashboard.putNumber("Bottom intake speed ", RobotConstants.bottomIntakeMotorSpeed);
+    SmartDashboard.putNumber("Intake speed ", RobotConstants.intakeMotorSpeed);
+    SmartDashboard.putNumber("Intake mover speed ", RobotConstants.intakeMoverMotorSpeed);
   }
 
 
@@ -28,30 +29,35 @@ public class Intake extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putBoolean("Intake is running ", runningForwardIntake);
-    SmartDashboard.putNumber("Top intake amp", topIntakeMotor.getOutputCurrent());
   }
 
   public void forwardIntakeOn() {
-    // topIntakeMotor.set(RobotConstants.topIntakeMotorSpeed);
-    // bottomIntakeMotor.set(RobotConstants.bottomIntakeMotorSpeed);
-    topIntakeMotor.set(SmartDashboard.getNumber("Top intake speed ", RobotConstants.topIntakeMotorSpeed));
-    bottomIntakeMotor.set(SmartDashboard.getNumber("Bottom intake speed ", RobotConstants.bottomIntakeMotorSpeed));
+    intakeMotor.set(SmartDashboard.getNumber("Intake speed ", RobotConstants.intakeMotorSpeed));
   }
 
   public void backwardIntakeOn() {
     if(runningForwardIntake == false){
-      topIntakeMotor.set(-RobotConstants.topIntakeMotorSpeed);
-      bottomIntakeMotor.set(-RobotConstants.bottomIntakeMotorSpeed);
+      intakeMotor.set(-RobotConstants.intakeMotorSpeed);
     }
   }
 
   public void stopIntake() {
-    topIntakeMotor.stopMotor();
-    bottomIntakeMotor.stopMotor();
+    intakeMotor.stopMotor();
   }
 
+  public void intakeUp() {
+    intakeMoverMotor.set(SmartDashboard.getNumber("Intake mover speed ", RobotConstants.intakeMoverMotorSpeed));
+  }
 
-  public void toggleIntake(){
+  public void intakeDown() {
+    intakeMoverMotor.set(-SmartDashboard.getNumber("Intake mover speed ", RobotConstants.intakeMoverMotorSpeed));
+  }
+
+  public void stopIntakeMover() {
+    intakeMoverMotor.stopMotor();
+  }
+
+  public void toggleIntake() {
     if (runningForwardIntake == true) {
       runningForwardIntake = false;
     } else {

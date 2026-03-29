@@ -50,6 +50,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public double yaw0to360;
     public RobotConfig config;
     public double direction;
+    public double distanceToHub;
 
     /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
     private static final Rotation2d kBlueAlliancePerspectiveRotation = Rotation2d.kZero;
@@ -341,6 +342,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         // } else {
         //     yaw0to360 = (getPigeon2().getYaw().getValueAsDouble()) % 360;
         // }
+        SmartDashboard.putNumber("Distance form hub ", distanceToHubMeters());
        
         if (!m_hasAppliedOperatorPerspective || DriverStation.isDisabled()) {
             DriverStation.getAlliance().ifPresent(allianceColor -> {
@@ -447,6 +449,15 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     }
     direction = Math.toRadians(direction);
     return direction;
+    }
+
+    public double distanceToHubMeters() {
+      if(DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) {
+        distanceToHub = Math.sqrt(Math.pow(getPose().getY() - Constants.blueHubY, 2) + Math.pow(getPose().getX() - Constants.blueHubX, 2));
+      } else if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
+         distanceToHub = Math.sqrt(Math.pow(getPose().getY() - Constants.redHubY, 2) + Math.pow(getPose().getX() - Constants.redHubX, 2)); 
+      }
+      return distanceToHub;
     }
 
     // public double distanceToHub() {

@@ -12,29 +12,23 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.RobotConstants;
 
 public class Shooter extends SubsystemBase {
-  TalonFX topShooterMotor = new TalonFX(RobotConstants.topShooterMotorId);
-  TalonFX bottomShooterMotor = new TalonFX(RobotConstants.bottomShooterMotorId);
+  TalonFX shooterMotor = new TalonFX(RobotConstants.shooterMotorId);
   boolean runningShooter = false;
   PIDController topPIDController = new PIDController(0, 0, 0);
   PIDController bottomPIDController = new PIDController(0, 0, 0);
-  double topShooterMotorP = 0;
-  double bottomShooterMotorP = 0;
-  double topShooterMotorI = 0;
-  double bottomShooterMotorI = 0;
+  double shooterMotorP = 0;
+  double shooterMotorI = 0;
+  double shooterMotorD = 0;
+  double shooterSetpoint = 0;
 
   /** Creates a new Shooter. */
   public Shooter() {
-    SmartDashboard.putNumber("Top shooter speed ", RobotConstants.topShooterMotorSpeed);
-    SmartDashboard.putNumber("Bottom shooter speed ", RobotConstants.bottomShooterMotorSpeed);
+    SmartDashboard.putNumber("Shooter speed ", RobotConstants.shooterMotorSpeed);
+    SmartDashboard.putNumber("Shooter Setpoint", 0);
 
-    SmartDashboard.putNumber("Top Shooter Test", RobotConstants.topShooterMotorSpeed/100);
-    SmartDashboard.putNumber("Bottom Shooter Test", RobotConstants.bottomShooterMotorSpeed/100);
-
-    SmartDashboard.putNumber("Top Shooter P ", 0.0012);
-    SmartDashboard.putNumber("Bottom Shooter P ", 0.0012);
-
-    SmartDashboard.putNumber("Top Shooter I ", 0.0045);
-    SmartDashboard.putNumber("Bottom Shooter I ", 0.0045);
+    SmartDashboard.putNumber("Top Shooter P ", 0.01);
+    SmartDashboard.putNumber("Top Shooter I ", 0.02);
+    SmartDashboard.putNumber("Top Shooter D ", 0.001);
   }
 
   @Override
@@ -42,47 +36,31 @@ public class Shooter extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putBoolean("Shooter is running ", runningShooter);
 
-    SmartDashboard.putNumber("Top Motor", topShooterMotor.getVelocity().getValueAsDouble());
-    SmartDashboard.putNumber("Bottom Motor", bottomShooterMotor.getVelocity().getValueAsDouble());
+    SmartDashboard.putNumber("Top Motor", shooterMotor.getVelocity().getValueAsDouble());
 
-    if (SmartDashboard.getNumber("Top Shooter P ", 0) != topShooterMotorP) {
-      topShooterMotorP = SmartDashboard.getNumber("Top Shooter P ", 0);
-      topPIDController.setP(topShooterMotorP);
+    if (SmartDashboard.getNumber("Top Shooter P ", 0) != shooterMotorP) {
+      shooterMotorP = SmartDashboard.getNumber("Top Shooter P ", 0);
+      topPIDController.setP(shooterMotorP);
     }
 
-    if (SmartDashboard.getNumber("Bottom Shooter P ", 0) != bottomShooterMotorP) {
-      bottomShooterMotorP = SmartDashboard.getNumber("Bottom Shooter P ", 0);
-      bottomPIDController.setP(bottomShooterMotorP);
+    if (SmartDashboard.getNumber("Top Shooter I ", 0) != shooterMotorI) {
+      shooterMotorI = SmartDashboard.getNumber("Top Shooter I ", 0);
+      topPIDController.setI(shooterMotorI);
     }
 
-    if (SmartDashboard.getNumber("Top Shooter I ", 0) != topShooterMotorI) {
-      topShooterMotorI = SmartDashboard.getNumber("Top Shooter I ", 0);
-      topPIDController.setI(topShooterMotorI);
+    if (SmartDashboard.getNumber("Top Shooter D ", 0) != shooterMotorD) {
+      shooterMotorD = SmartDashboard.getNumber("Top Shooter D ", 0);
+      topPIDController.setD(shooterMotorD);
     }
-
-    if (SmartDashboard.getNumber("Bottom Shooter I ", 0) != bottomShooterMotorI) {
-      bottomShooterMotorI = SmartDashboard.getNumber("Bottom Shooter I ", 0);
-      bottomPIDController.setI(bottomShooterMotorI);
-    }
-
-    if (false == true) {
-      double topPIDOutput = topPIDController.calculate(topShooterMotor.getVelocity().getValueAsDouble());
-      topShooterMotor.set(topPIDOutput);
-
-      double bottomPIDOutput = bottomPIDController.calculate(bottomShooterMotor.getVelocity().getValueAsDouble());
-      bottomShooterMotor.set(bottomPIDOutput);
+    
+    if (shooterSetpoint != 0) {
+      double topPIDOutput = topPIDController.calculate(shooterMotor.getVelocity().getValueAsDouble());
+      shooterMotor.set(topPIDOutput);
     } else {
-      topShooterMotor.stopMotor();
-      bottomShooterMotor.stopMotor();
+      topPIDController.reset();
+      shooterMotor.stopMotor();
     }
 
-    if (SmartDashboard.getNumber("Top shooter speed ", 0) !=  topPIDController.getSetpoint()) {
-      topPIDController.setSetpoint(SmartDashboard.getNumber("Top shooter speed ", 0));
-    }
-
-    if (SmartDashboard.getNumber("Bottom shooter speed ", 0) !=  bottomPIDController.getSetpoint()) {
-      bottomPIDController.setSetpoint(SmartDashboard.getNumber("Bottom shooter speed ", 0));
-    }
   }
 
   public void setTargetSpeed(double topMotorSpeed, double bottomMotorSpeed) {
@@ -93,20 +71,21 @@ public class Shooter extends SubsystemBase {
 
   public void startShooter() {
     //runningShooter = true;
-    //topShooterMotor.set(SmartDashboard.getNumber("Top Shooter Test", RobotConstants.topShooterMotorSpeed/100));
-    //bottomShooterMotor.set(SmartDashboard.getNumber("Bottom Shooter Test", RobotConstants.bottomIntakeMotorSpeed/100));
-    topShooterMotor.set(-0.4);
-    bottomShooterMotor.set(0.92);
+    shooterMotor.set(SmartDashboard.getNumber("Shooter speed ", RobotConstants.shooterMotorSpeed));
+  }
+
+  public void setShooter(double speed) {
+    shooterSetpoint = speed;
+    topPIDController.setSetpoint(speed);
   }
 
   public void stop() {
-    topShooterMotor.stopMotor();
-    bottomShooterMotor.stopMotor();
+    shooterMotor.stopMotor();
+    shooterSetpoint = 0;
     runningShooter = false;
   }
   
   public boolean shooterIsAtSpeed() {
-    return Math.abs(topShooterMotor.getVelocity().getValueAsDouble()) >= Math.abs( RobotConstants.topShooterMotorSpeed * 0.95) 
-    && Math.abs(bottomShooterMotor.getVelocity().getValueAsDouble()) >= Math.abs( RobotConstants.bottomShooterMotorSpeed * 0.95);
+    return Math.abs(shooterMotor.getVelocity().getValueAsDouble()) >= Math.abs( RobotConstants.shooterMotorSpeed * RobotConstants.maxKrakenMotorSpeedRps * 0.95);
   }
 }

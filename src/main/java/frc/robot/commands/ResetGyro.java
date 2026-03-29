@@ -23,6 +23,7 @@ public class ResetGyro extends Command {
   @Override
   public void initialize() {
     swerveDrivetrain.resetRotation(new Rotation2d(0));
+    //swerveDrivetrain.setOperatorPerspectiveForward(new Rotation2d(0));
   }
 
   // Called every time the scheduler runs while the command is scheduled.

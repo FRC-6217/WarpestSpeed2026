@@ -26,10 +26,12 @@ import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.AdjustingShot;
 import frc.robot.commands.Agitate;
 import frc.robot.commands.ClimbingCommand;
 import frc.robot.commands.IndexerCommand;
 import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.PIDShooter;
 import frc.robot.commands.ResetGyro;
 import frc.robot.commands.ShootBall;
 import frc.robot.commands.ShooterCommand;
@@ -63,7 +65,7 @@ public class RobotContainer {
     public final Intake intake = new Intake();
     public final Shooter shooter = new Shooter();
     public final Indexer indexer = new Indexer();
-    public final Agitator agitator = new Agitator();
+    //public final Agitator agitator = new Agitator();
 
     public final MotorOpperator shooterMotor = new MotorOpperator(41);
     public final MotorOpperator indexMotor = new MotorOpperator(42);
@@ -94,7 +96,7 @@ public class RobotContainer {
         //NamedCommands.registerCommand("shootBall", new ShootBall(indexMotor, shooterMotor));
         NamedCommands.registerCommand("intakeFuel", Commands.runOnce(intake::forwardIntakeOn, intake).alongWith(Commands.runOnce(indexer::backwardIndexer, indexer)));
         NamedCommands.registerCommand("stopIntake", Commands.runOnce(intake::stopIntake, intake).alongWith(Commands.runOnce(indexer::stop, indexer)));
-        NamedCommands.registerCommand("shootBall", new ShootBall(indexer, shooter,agitator));
+        NamedCommands.registerCommand("shootBall", new ShootBall(indexer, shooter));
         NamedCommands.registerCommand("stopShootBall", Commands.runOnce(indexer::stop, indexer));
         NamedCommands.registerCommand("startShooter", Commands.runOnce(shooter::startShooter, shooter));
         NamedCommands.registerCommand("stopShooter", Commands.runOnce(shooter::stop, shooter));
@@ -162,7 +164,7 @@ public class RobotContainer {
         // m_driverController.b().whileTrue(swerveDrivetrain.applyRequest(() ->
         //     point.withModuleDirection(new Rotation2d(-m_driverController.getLeftY(), -m_driverController.getLeftX()))
         // ));
-        m_driverController.b().whileTrue(new Agitate(agitator));
+        //m_driverController.b().whileTrue(new Agitate(agitator));
 
         m_driverController.x().toggleOnTrue(swerveDrivetrain.applyRequest(() -> allineRot.withTargetDirection(new Rotation2d(swerveDrivetrain.allignedAngle()))
                     .withVelocityX(-tranXSlewRateLimiter.calculate(m_driverController.getLeftY() * MaxSpeed * swerveDrivetrain.governor.getGovernor())) // Drive forward with negative Y (forward)
@@ -181,13 +183,13 @@ public class RobotContainer {
 
          //m_gameOperatorController.x().whileTrue(new RunMotor(shooterMotor, 0.8));
          //m_gameOperatorController.y().whileTrue(new RunMotor(indexMotor, -0.5));
-        m_gameOperatorController.y().whileTrue(new IntakeCommand(intake).alongWith(Commands.runOnce(indexer::backwardIndexer, indexer)));
-        m_gameOperatorController.y().onFalse(Commands.runOnce(indexer::stop, indexer));
+        m_gameOperatorController.y().whileTrue(new IntakeCommand(intake));
         m_gameOperatorController.b().whileTrue(Commands.runOnce(intake::backwardIntakeOn, intake)).onFalse(Commands.runOnce(intake::stopIntake, intake));
-        m_gameOperatorController.x().toggleOnTrue(new ShooterCommand(shooter,agitator));
+        m_gameOperatorController.x().toggleOnTrue(new PIDShooter
+        (swerveDrivetrain, shooter));
         m_gameOperatorController.a().whileTrue(new IndexerCommand(indexer, shooter));
-        m_gameOperatorController.povUp().whileTrue(Commands.runOnce(climber::forward, climber)).onFalse(Commands.runOnce(climber::stop, climber));
-        m_gameOperatorController.povDown().whileTrue(Commands.runOnce(climber::backward, climber)).onFalse(Commands.runOnce(climber::stop, climber));
+        m_gameOperatorController.povUp().whileTrue(Commands.runOnce(intake::intakeUp, intake)).onFalse(Commands.runOnce(intake::stopIntakeMover, intake));
+        m_gameOperatorController.povDown().whileTrue(Commands.runOnce(intake::intakeDown, intake)).onFalse(Commands.runOnce(intake::stopIntakeMover, intake));
 
         // Reset the field-centric heading on left bumper press.
     }

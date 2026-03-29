@@ -18,16 +18,14 @@ public class ShootBall extends Command {
   /** Creates a new ShootBall. */
   Indexer indexMotor;
   Shooter shooterMotor;
-  Agitator agitator;
   boolean timerStarted = true;
   private static Timer timer = new Timer();
 
-  public ShootBall(Indexer indexMotor, Shooter shooterMotor, Agitator agitator) {
+  public ShootBall(Indexer indexMotor, Shooter shooterMotor) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.indexMotor = indexMotor;
     this.shooterMotor = shooterMotor;
-    this.agitator = agitator;
-    addRequirements(shooterMotor, indexMotor, agitator);
+    addRequirements(shooterMotor, indexMotor);
   }
 
   // Called when the command is initially scheduled.
@@ -46,7 +44,6 @@ public class ShootBall extends Command {
       indexMotor.startIndexer();
     }
     shooterMotor.startShooter();
-    agitator.startAgitator();
   }
 
   // Called once the command ends or is interrupted.
@@ -59,6 +56,6 @@ public class ShootBall extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return timer.hasElapsed(5);
+    return timer.hasElapsed(7);
   }
 }
