@@ -34,21 +34,35 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().run(); 
 
         if (kUseLimelight) {
-      var driveState = m_robotContainer.swerveDrivetrain.getState();
-      double headingDeg = driveState.Pose.getRotation().getDegrees();
-      double omegaRps = Units.radiansToRotations(driveState.Speeds.omegaRadiansPerSecond);
-      double translationMps = Math.sqrt(Math.pow((driveState.Speeds.vxMetersPerSecond), 2) 
-                                        + Math.pow((driveState.Speeds.vyMetersPerSecond), 2)) ;
+            var driveState = m_robotContainer.swerveDrivetrain.getState();
+            double headingDeg = driveState.Pose.getRotation().getDegrees();
+            double omegaRps = Units.radiansToRotations(driveState.Speeds.omegaRadiansPerSecond);
+            double translationMps = Math.sqrt(Math.pow((driveState.Speeds.vxMetersPerSecond), 2) 
+                                                + Math.pow((driveState.Speeds.vyMetersPerSecond), 2));
 
-      LimelightHelpers.SetRobotOrientation(Constants.frontLimelightName, headingDeg, 0, 0, 0, 0, 0);
+            LimelightHelpers.SetRobotOrientation(Constants.frontLimelightName, headingDeg, 0, 0, 0, 0, 0);
+            LimelightHelpers.SetRobotOrientation(Constants.leftLimelightName, headingDeg, 0, 0, 0, 0, 0);
+            LimelightHelpers.SetRobotOrientation(Constants.rightLimelightName, headingDeg, 0, 0, 0, 0, 0);
 
-      //LimelightHelpers.SetIMUMode(Constants.frontLimelightName,3);
+            //LimelightHelpers.SetIMUMode(Constants.frontLimelightName,3);
 
-      var llMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(Constants.frontLimelightName);
-      if (llMeasurement != null && llMeasurement.tagCount > 0 && Math.abs(omegaRps) < 2.0 && translationMps < 1.25) {
-        m_robotContainer.swerveDrivetrain.addVisionMeasurement(llMeasurement.pose, llMeasurement.timestampSeconds);
-      }
-    }
+            //m_robotContainer.swerveDrivetrain.setVisionMeasurementStdDevs();
+
+            var frontLLMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(Constants.frontLimelightName);
+            if (frontLLMeasurement != null && frontLLMeasurement.tagCount > 0 && Math.abs(omegaRps) < 2.0 && translationMps < 1.25) {
+                m_robotContainer.swerveDrivetrain.addVisionMeasurement(frontLLMeasurement.pose, frontLLMeasurement.timestampSeconds);
+            }
+
+            var leftLLMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(Constants.leftLimelightName);
+            if (leftLLMeasurement != null && leftLLMeasurement.tagCount > 0 && Math.abs(omegaRps) < 2.0 && translationMps < 1.25) {
+                m_robotContainer.swerveDrivetrain.addVisionMeasurement(leftLLMeasurement.pose, leftLLMeasurement.timestampSeconds);
+            }
+
+            var rightLLMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(Constants.rightLimelightName);
+            if (rightLLMeasurement != null && rightLLMeasurement.tagCount > 0 && Math.abs(omegaRps) < 2.0 && translationMps < 1.25) {
+                m_robotContainer.swerveDrivetrain.addVisionMeasurement(rightLLMeasurement.pose, rightLLMeasurement.timestampSeconds);
+            }
+        }
     }
 
     public void cancelAll() {

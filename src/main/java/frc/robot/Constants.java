@@ -21,7 +21,8 @@ public class Constants {
   }
   
   public static final String frontLimelightName = "limelight-one";
-  public static final String backLimelightName = "limelight-twoplus";
+  public static final String leftLimelightName = "limelight-left";
+  public static final String rightLimelightName = "limelight-right";
 
   public class RobotConstants {
    //Motor id
@@ -34,13 +35,15 @@ public class Constants {
 
    //Motor speed
    public static final double intakeMotorSpeed = -0.6;
-   public static final double intakeMoverMotorSpeed = -0.1;
+   public static final double intakeMoverMotorSpeed = 0.1;
    public static final double shooterMotorSpeed= -0.40;
    public static final double indexerMotorSpeed = -0.5;
    public static final double climberMotorSpeed = -0.5;
    public static final double agitatorMotorSpeed = 0.4;
 
    public static final double maxKrakenMotorSpeedRps = 100;
+   public static final double intakeUpEncoderValue = 0;
+   public static final double intakeDownEncoderValue = 0;
   }
 
    public static final double blueHubX = 4.625;

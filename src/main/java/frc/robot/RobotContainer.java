@@ -185,11 +185,11 @@ public class RobotContainer {
          //m_gameOperatorController.y().whileTrue(new RunMotor(indexMotor, -0.5));
         m_gameOperatorController.y().whileTrue(new IntakeCommand(intake));
         m_gameOperatorController.b().whileTrue(Commands.runOnce(intake::backwardIntakeOn, intake)).onFalse(Commands.runOnce(intake::stopIntake, intake));
-        m_gameOperatorController.x().toggleOnTrue(new PIDShooter
-        (swerveDrivetrain, shooter));
+        m_gameOperatorController.x().toggleOnTrue(new PIDShooter(swerveDrivetrain, shooter));
+        //m_gameOperatorController.x().toggleOnTrue(new ShooterCommand(shooter));
         m_gameOperatorController.a().whileTrue(new IndexerCommand(indexer, shooter));
-        m_gameOperatorController.povUp().whileTrue(Commands.runOnce(intake::intakeUp, intake)).onFalse(Commands.runOnce(intake::stopIntakeMover, intake));
-        m_gameOperatorController.povDown().whileTrue(Commands.runOnce(intake::intakeDown, intake)).onFalse(Commands.runOnce(intake::stopIntakeMover, intake));
+        m_gameOperatorController.povUp().onTrue(Commands.runOnce(intake::intakeUp, intake));
+        m_gameOperatorController.povDown().onTrue(Commands.runOnce(intake::intakeDown, intake));
 
         // Reset the field-centric heading on left bumper press.
     }
