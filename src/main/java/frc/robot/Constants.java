@@ -28,7 +28,7 @@ public class Constants {
    //Motor id
    public static final int climberMotorId = 32;
    public static final int indexerMotorId = 36;
-   public static final int intakeMotorId = 15;
+   public static final int intakeMotorId = 39;
    public static final int intakeMoverMotorId = 35;
    public static final int shooterMotorId = 16;
    public static final int agitatorMotorId = 0;
@@ -36,7 +36,7 @@ public class Constants {
    //Motor speed
    public static final double intakeMotorSpeed = -0.6;
    public static final double intakeMoverMotorSpeed = 0.1;
-   public static final double shooterMotorSpeed= -0.40;
+   public static final double shooterMotorSpeed= -0.50;
    public static final double indexerMotorSpeed = -0.5;
    public static final double climberMotorSpeed = -0.5;
    public static final double agitatorMotorSpeed = 0.4;

@@ -96,7 +96,7 @@ public class RobotContainer {
         //NamedCommands.registerCommand("shootBall", new ShootBall(indexMotor, shooterMotor));
         NamedCommands.registerCommand("intakeFuel", Commands.runOnce(intake::forwardIntakeOn, intake).alongWith(Commands.runOnce(indexer::backwardIndexer, indexer)));
         NamedCommands.registerCommand("stopIntake", Commands.runOnce(intake::stopIntake, intake).alongWith(Commands.runOnce(indexer::stop, indexer)));
-        NamedCommands.registerCommand("shootBall", new ShootBall(indexer, shooter));
+        NamedCommands.registerCommand("shootBall", new ShootBall(indexer, shooter, swerveDrivetrain));
         NamedCommands.registerCommand("stopShootBall", Commands.runOnce(indexer::stop, indexer));
         NamedCommands.registerCommand("startShooter", Commands.runOnce(shooter::startShooter, shooter));
         NamedCommands.registerCommand("stopShooter", Commands.runOnce(shooter::stop, shooter));
@@ -107,15 +107,14 @@ public class RobotContainer {
           // Build an auto chooser. This will use Commands.none() as the default option.
         autoChooser = AutoBuilder.buildAutoChooser();
         
-        //autoChooser.addOption("test", new PathPlannerAuto("test"));
+        autoChooser.addOption("test", new PathPlannerAuto("test"));
         //autoChooser.addOption("FirstAuto", new PathPlannerAuto("FirstAuto"));
         autoChooser.addOption("averysauto", new PathPlannerAuto("averysauto"));
+        autoChooser.addOption("hubStartAndTwoDepotShoot", new PathPlannerAuto("hubStartAndTwoDepotShoot"));
+        autoChooser.addOption("outpostStartIntakeTwice", new PathPlannerAuto("outpostStartIntakeTwice"));
+        autoChooser.addOption("depotStartIntakeTwice", new PathPlannerAuto("depotStartIntakeTwice"));
         //autoChooser.addOption("goToMiddleAndPushBall", new PathPlannerAuto("goCenterAndPushBall"));
-        autoChooser.addOption("OutpostSideToMiddleAndBack", new PathPlannerAuto("OutpostSideToMiddleAndBack"));
-        autoChooser.addOption("DepotSideToMiddleAndBack", new PathPlannerAuto("DepotSideToMiddleAndBack"));
-        autoChooser.addOption("DepotSideStraightToMiddle", new PathPlannerAuto("DepotSideStraightToMiddle"));
-        autoChooser.addOption("OutpostSideStraightToMiddle", new PathPlannerAuto("OutpostSideStraightToMiddle"));
-        autoChooser.addOption("MiddleToDepot", new PathPlannerAuto("MiddleToDepot"));
+        
 
         // Another option that allows you to specify the default auto by its name
         // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
@@ -192,6 +191,7 @@ public class RobotContainer {
         m_gameOperatorController.a().whileTrue(new IndexerCommand(indexer, shooter));
         m_gameOperatorController.povUp().onTrue(Commands.runOnce(intake::intakeUp, intake));
         m_gameOperatorController.povDown().onTrue(Commands.runOnce(intake::intakeDown, intake));
+        m_gameOperatorController.rightBumper().whileTrue(new ShooterCommand(shooter));
 
         // Reset the field-centric heading on left bumper press.
     }

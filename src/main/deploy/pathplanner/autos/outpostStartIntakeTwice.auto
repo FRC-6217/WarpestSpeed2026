@@ -5,6 +5,42 @@
     "data": {
       "commands": [
         {
+          "type": "path",
+          "data": {
+            "pathName": "OutpostTrenchStartToCenter"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "intakeFuel"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "OutpostCenterToCenterIntake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "OutpostCenterIntakeToOutpostCenter"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stopIntake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "OutpostCenterToOutpostShoot"
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "shootBall"
@@ -13,49 +49,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "startToOutpost"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 3.0
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "outpostToMiddleShot"
+            "pathName": "OutpostShootToCenter"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "shootBall"
+            "name": "intakeFuel"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "middleShotToUnderTrench"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 3.0
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "trenchToMiddleShot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shootBall"
+            "pathName": "OutpostCenterToCenterIntakeTwo"
           }
         }
       ]

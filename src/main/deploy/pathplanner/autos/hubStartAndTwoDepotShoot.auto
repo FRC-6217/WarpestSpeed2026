@@ -7,25 +7,7 @@
         {
           "type": "named",
           "data": {
-            "name": "startShooter"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "OutpostStartToOupostShoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shootBall"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "OutpostShootToOutpostMiddleCenter"
+            "name": "lowerIntake"
           }
         },
         {
@@ -35,15 +17,21 @@
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "startShooter"
+            "pathName": "hubStartToDepot"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "OutpostMiddleCenterToDepotMiddleCenter"
+            "pathName": "depotToDepotShot"
           }
         },
         {
@@ -53,9 +41,39 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "shootBall"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "intakeFuel"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "DepotMiddleCenterToDepotShoot"
+            "pathName": "depotShotToDepotIntake"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "DepotTwoIntakeToDepotShot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stopIntake"
           }
         },
         {

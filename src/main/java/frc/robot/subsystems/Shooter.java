@@ -71,12 +71,15 @@ public class Shooter extends SubsystemBase {
 
   public void startShooter() {
     //runningShooter = true;
-    shooterMotor.set(SmartDashboard.getNumber("Shooter speed ", RobotConstants.shooterMotorSpeed));
+    shooterSetpoint = SmartDashboard.getNumber("Shooter speed ", RobotConstants.shooterMotorSpeed);
+    topPIDController.setSetpoint(SmartDashboard.getNumber("Shooter speed ", RobotConstants.shooterMotorSpeed));
+    runningShooter = true;
   }
 
   public void setShooter(double speed) {
     shooterSetpoint = speed;
     topPIDController.setSetpoint(speed);
+    runningShooter = true;
   }
 
   public void stop() {

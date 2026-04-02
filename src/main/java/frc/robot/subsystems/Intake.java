@@ -8,6 +8,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.pathplanner.lib.config.RobotConfig;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.EncoderConfigAccessor;
+import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkMax;
 
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
@@ -23,7 +24,7 @@ public class Intake extends SubsystemBase {
     neutral,
   }
 
-  TalonFX intakeMotor = new TalonFX(RobotConstants.intakeMotorId);
+  SparkFlex intakeMotor = new SparkFlex(RobotConstants.intakeMotorId, MotorType.kBrushless);
   TalonFX intakeMoverMotor = new TalonFX(RobotConstants.intakeMoverMotorId);
   DutyCycleEncoder intakeMoverEncoder = new DutyCycleEncoder(0);
   boolean runningForwardIntake = false;

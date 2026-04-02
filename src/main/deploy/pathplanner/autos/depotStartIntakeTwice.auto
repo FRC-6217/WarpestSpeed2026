@@ -5,21 +5,9 @@
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "startShooter"
-          }
-        },
-        {
           "type": "path",
           "data": {
-            "pathName": "centerToDepotShot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shootBall"
+            "pathName": "DepotTrenchStartToCenter"
           }
         },
         {
@@ -31,25 +19,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "DepotShotToDepot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "startShooter"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
+            "pathName": "DepotCenterToCenterIntake"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "DepotToDepotShot"
+            "pathName": "DepotCenterIntakeToDepotCenter"
           }
         },
         {
@@ -59,9 +35,33 @@
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "DepotCenterToDepotShoot"
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "shootBall"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "DepotShootToDepotCenter"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "intakeFuel"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "DepotCenterToIntakeTwo"
           }
         }
       ]

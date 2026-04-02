@@ -442,12 +442,11 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     public double allignedAngle(){
        if(DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) {
-      direction = Math.toDegrees(Math.atan((this.getPose().getY() - Constants.blueHubY)/(this.getPose().getX() - Constants.blueHubX)));
+      direction = Math.atan((this.getPose().getY() - Constants.blueHubY)/(this.getPose().getX() - Constants.blueHubX));
     } else if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
-      direction = Math.toDegrees(Math.atan(this.getPose().getY() - Constants.redHubY)/(this.getPose().getX() - Constants.redHubX));
+      direction = Math.atan((this.getPose().getY() - Constants.redHubY)/(this.getPose().getX() - Constants.redHubX));
       
     }
-    direction = Math.toRadians(direction);
     return direction;
     }
 

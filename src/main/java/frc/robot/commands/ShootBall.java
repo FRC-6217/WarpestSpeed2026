@@ -25,10 +25,12 @@ public class ShootBall extends Command {
   boolean timerStarted = true;
   private static Timer timer = new Timer();
 
-  public ShootBall(Indexer indexMotor, Shooter shooterMotor) {
+  public 
+  ShootBall(Indexer indexMotor, Shooter shooterMotor, CommandSwerveDrivetrain swerveDrivetrain) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.indexMotor = indexMotor;
     this.shooterMotor = shooterMotor;
+    this.swerveDrivetrain = swerveDrivetrain;
     addRequirements(shooterMotor, indexMotor);
   }
 
@@ -60,6 +62,6 @@ public class ShootBall extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return timer.hasElapsed(7);
+    return timer.hasElapsed(5);
   }
 }
