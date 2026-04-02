@@ -9,7 +9,7 @@
       "prevControl": null,
       "nextControl": {
         "x": 4.37546362339515,
-        "y": 0.47039942938659246
+        "y": 0.4703994293865926
       },
       "isLocked": false,
       "linkedName": "outpostStartStraight"
@@ -21,7 +21,7 @@
       },
       "prevControl": {
         "x": 6.571312410841653,
-        "y": 0.6903566333808842
+        "y": 0.690356633380884
       },
       "nextControl": null,
       "isLocked": false,

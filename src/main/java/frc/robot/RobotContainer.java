@@ -101,6 +101,8 @@ public class RobotContainer {
         NamedCommands.registerCommand("startShooter", Commands.runOnce(shooter::startShooter, shooter));
         NamedCommands.registerCommand("stopShooter", Commands.runOnce(shooter::stop, shooter));
         NamedCommands.registerCommand("climb", new ClimbingCommand(climber));
+        NamedCommands.registerCommand("lowerIntake", Commands.runOnce(intake::intakeDown, intake));
+        NamedCommands.registerCommand("raiseIntake", Commands.runOnce(intake::intakeUp, intake));
 
           // Build an auto chooser. This will use Commands.none() as the default option.
         autoChooser = AutoBuilder.buildAutoChooser();

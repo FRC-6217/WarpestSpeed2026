@@ -42,8 +42,8 @@ public class Constants {
    public static final double agitatorMotorSpeed = 0.4;
 
    public static final double maxKrakenMotorSpeedRps = 100;
-   public static final double intakeUpEncoderValue = 0;
-   public static final double intakeDownEncoderValue = 0;
+   public static final double intakeUpEncoderValue = 0.79;
+   public static final double intakeDownEncoderValue = 0.97;
   }
 
    public static final double blueHubX = 4.625;

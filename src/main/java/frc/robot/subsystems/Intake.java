@@ -48,13 +48,13 @@ public class Intake extends SubsystemBase {
     if(intakeState == IntakeState.neutral) {
       intakeMoverMotor.stopMotor();
     } else if(intakeState == IntakeState.intakeUp) {
-      if(intakeMoverEncoder.get() < RobotConstants.intakeUpEncoderValue) {
+      if(intakeMoverEncoder.get() > RobotConstants.intakeUpEncoderValue) {
         intakeMoverMotor.set(RobotConstants.intakeMoverMotorSpeed);
       } else {
         intakeState =IntakeState.neutral;
       }
     } else if(intakeState == IntakeState.intakeDown) {
-      if(intakeMoverEncoder.get() > RobotConstants.intakeDownEncoderValue) {
+      if(intakeMoverEncoder.get() < RobotConstants.intakeDownEncoderValue) {
         intakeMoverMotor.set(-RobotConstants.intakeMoverMotorSpeed);
       } else {
         intakeState =IntakeState.neutral;

@@ -4,11 +4,14 @@
 
 package frc.robot.commands;
 
+import com.ctre.phoenix6.swerve.SwerveDrivetrain;
+
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Robot;
 import frc.robot.subsystems.Agitator;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.MotorOpperator;
 import frc.robot.subsystems.Shooter;
@@ -18,6 +21,7 @@ public class ShootBall extends Command {
   /** Creates a new ShootBall. */
   Indexer indexMotor;
   Shooter shooterMotor;
+  CommandSwerveDrivetrain swerveDrivetrain;
   boolean timerStarted = true;
   private static Timer timer = new Timer();
 
@@ -34,7 +38,7 @@ public class ShootBall extends Command {
     timer.reset();
     timer.start();
     timerStarted = true;
-    shooterMotor.startShooter();
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -43,7 +47,7 @@ public class ShootBall extends Command {
     if(shooterMotor.shooterIsAtSpeed()){
       indexMotor.startIndexer();
     }
-    shooterMotor.startShooter();
+    shooterMotor.setShooter((-0.6483165)*Math.pow(swerveDrivetrain.distanceToHubMeters(), 6)+(12.91398)*Math.pow(swerveDrivetrain.distanceToHubMeters(), 5)+(-104.0777)*Math.pow(swerveDrivetrain.distanceToHubMeters(), 4)+(432.9310)*Math.pow(swerveDrivetrain.distanceToHubMeters(), 3)+(-976.9832)*Math.pow(swerveDrivetrain.distanceToHubMeters(), 2)+(1126.695)*swerveDrivetrain.distanceToHubMeters()+(-558.3791));
   }
 
   // Called once the command ends or is interrupted.
