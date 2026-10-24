@@ -66,6 +66,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     public Governor governor = new Governor();
     public SwerveRequest.ApplyRobotSpeeds pathPlannerSwerveRequest = new SwerveRequest.ApplyRobotSpeeds();
+    private SwerveRequest.FieldCentricFacingAngle allineRot = new SwerveRequest.FieldCentricFacingAngle();
 
     /* SysId routine for characterizing translation. This is used to find PID gains for the drive motors. */
     private final SysIdRoutine m_sysIdRoutineTranslation = new SysIdRoutine(
@@ -141,6 +142,13 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     public void driveRobotRelative(ChassisSpeeds cSpeeds){
         applyRequest(() -> pathPlannerSwerveRequest.withSpeeds(cSpeeds));
+    }
+
+    public void alineToHub() {
+        applyRequest(() -> allineRot.withTargetDirection(new Rotation2d(allignedAngle()))
+                    .withVelocityX(0) // Drive forward with negative Y (forward)
+                    .withVelocityY(0) // Drive left with negative X (left)
+                    .withHeadingPID(5, 0, 0));
     }
 
     /* The SysId routine to test */
@@ -457,6 +465,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
          distanceToHub = Math.sqrt(Math.pow(getPose().getY() - Constants.redHubY, 2) + Math.pow(getPose().getX() - Constants.redHubX, 2)); 
       }
       return distanceToHub;
+    }
+
+    public DriverStation.Alliance getDriverStation() {
+      return DriverStation.getAlliance().get();
     }
 
     // public double distanceToHub() {

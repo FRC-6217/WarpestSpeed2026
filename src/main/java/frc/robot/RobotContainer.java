@@ -28,6 +28,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.AdjustingShot;
 import frc.robot.commands.Agitate;
+import frc.robot.commands.AlineWait;
 import frc.robot.commands.ClimbingCommand;
 import frc.robot.commands.IndexerCommand;
 import frc.robot.commands.IntakeCommand;
@@ -94,7 +95,7 @@ public class RobotContainer {
 
         //NamedCommands.registerCommand("printWhenDone", Commands.print("I am done with pathplanner auto"));
         //NamedCommands.registerCommand("shootBall", new ShootBall(indexMotor, shooterMotor));
-        NamedCommands.registerCommand("intakeFuel", Commands.runOnce(intake::forwardIntakeOn, intake).alongWith(Commands.runOnce(indexer::backwardIndexer, indexer)));
+        NamedCommands.registerCommand("intakeFuel", Commands.runOnce(intake::forwardIntakeOn, intake));
         NamedCommands.registerCommand("stopIntake", Commands.runOnce(intake::stopIntake, intake).alongWith(Commands.runOnce(indexer::stop, indexer)));
         NamedCommands.registerCommand("shootBall", new ShootBall(indexer, shooter, swerveDrivetrain));
         NamedCommands.registerCommand("stopShootBall", Commands.runOnce(indexer::stop, indexer));
@@ -103,6 +104,8 @@ public class RobotContainer {
         NamedCommands.registerCommand("climb", new ClimbingCommand(climber));
         NamedCommands.registerCommand("lowerIntake", Commands.runOnce(intake::intakeDown, intake));
         NamedCommands.registerCommand("raiseIntake", Commands.runOnce(intake::intakeUp, intake));
+        //NamedCommands.registerCommand("alineToHub", Commands.runOnce(swerveDrivetrain::alineToHub, swerveDrivetrain));
+        NamedCommands.registerCommand("alineWait", new AlineWait(swerveDrivetrain));
 
           // Build an auto chooser. This will use Commands.none() as the default option.
         autoChooser = AutoBuilder.buildAutoChooser();
@@ -110,9 +113,11 @@ public class RobotContainer {
         autoChooser.addOption("test", new PathPlannerAuto("test"));
         //autoChooser.addOption("FirstAuto", new PathPlannerAuto("FirstAuto"));
         autoChooser.addOption("averysauto", new PathPlannerAuto("averysauto"));
-        autoChooser.addOption("hubStartAndTwoDepotShoot", new PathPlannerAuto("hubStartAndTwoDepotShoot"));
-        autoChooser.addOption("outpostStartIntakeTwice", new PathPlannerAuto("outpostStartIntakeTwice"));
-        autoChooser.addOption("depotStartIntakeTwice", new PathPlannerAuto("depotStartIntakeTwice"));
+        autoChooser.addOption("hubAuto", new PathPlannerAuto("hubAuto"));
+        autoChooser.addOption("outpostAuto", new PathPlannerAuto("outpostAuto"));
+        autoChooser.addOption("depotAuto", new PathPlannerAuto("depotAuto"));
+        autoChooser.addOption("hubBackup", new PathPlannerAuto("hubBackup"));
+        autoChooser.addOption("outpostBackup", new PathPlannerAuto("outpostBackup"));
         //autoChooser.addOption("goToMiddleAndPushBall", new PathPlannerAuto("goCenterAndPushBall"));
         
 
@@ -154,10 +159,12 @@ public class RobotContainer {
         Trigger driverRightBack = m_driverController.button(Constants.OperatorConstants.kRightBackButton);
         Trigger resetDriverGyro = m_driverController.button(Constants.OperatorConstants.kLeftBackButton);
 
+
         slowMode.onTrue(Commands.runOnce(swerveDrivetrain.governor::setSlowMode, swerveDrivetrain));
         fastMode.onTrue(Commands.runOnce(swerveDrivetrain.governor::setFastMode, swerveDrivetrain));
         reduceSpeed.onTrue(Commands.runOnce(swerveDrivetrain.governor::decrement, swerveDrivetrain));
         increaseSpeed.onTrue(Commands.runOnce(swerveDrivetrain.governor::increment, swerveDrivetrain));
+
         
 
         resetDriverGyro.whileTrue(new ResetGyro(swerveDrivetrain));
@@ -171,6 +178,7 @@ public class RobotContainer {
                     .withVelocityX(-tranXSlewRateLimiter.calculate(m_driverController.getLeftY() * MaxSpeed * swerveDrivetrain.governor.getGovernor())) // Drive forward with negative Y (forward)
                     .withVelocityY(-tranYSlewRateLimiter.calculate(m_driverController.getLeftX() * MaxSpeed * swerveDrivetrain.governor.getGovernor())) // Drive left with negative X (left)
                     .withHeadingPID(5, 0, 0)));
+        m_driverController.b().toggleOnTrue(new ShooterCommand(shooter));
 
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.
@@ -187,12 +195,11 @@ public class RobotContainer {
         m_gameOperatorController.y().whileTrue(new IntakeCommand(intake));
         m_gameOperatorController.b().whileTrue(Commands.runOnce(intake::backwardIntakeOn, intake)).onFalse(Commands.runOnce(intake::stopIntake, intake));
         m_gameOperatorController.x().toggleOnTrue(new PIDShooter(swerveDrivetrain, shooter));
-        //m_gameOperatorController.x().toggleOnTrue(new ShooterCommand(shooter));
         m_gameOperatorController.a().whileTrue(new IndexerCommand(indexer, shooter));
-        m_gameOperatorController.povUp().onTrue(Commands.runOnce(intake::intakeUp, intake));
+        m_gameOperatorController.povUp().whileTrue(Commands.runOnce(intake::intakeUp, intake)).onFalse(Commands.runOnce(intake::stopIntakeMover, intake));
         m_gameOperatorController.povDown().onTrue(Commands.runOnce(intake::intakeDown, intake));
         m_gameOperatorController.rightBumper().whileTrue(new ShooterCommand(shooter));
-
+        m_gameOperatorController.leftBumper().whileTrue(Commands.runOnce(intake::intakeDown, intake)).onFalse(Commands.runOnce(intake::stopIntakeMover, intake));
         // Reset the field-centric heading on left bumper press.
     }
 

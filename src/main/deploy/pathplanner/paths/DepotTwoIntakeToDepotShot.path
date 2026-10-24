@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.7397004279600568,
-        "y": 6.0081455064194005
+        "x": 0.6491298145506419,
+        "y": 5.878758915834522
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.7397004279600568,
-        "y": 6.0081455064194005
+        "x": 1.649129814550642,
+        "y": 5.878758915834522
       },
       "isLocked": false,
       "linkedName": "DepotIntakeTwo"
@@ -47,7 +47,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -36.109576742636115
+    "rotation": -26.872538991655762
   },
   "reversed": false,
   "folder": null,

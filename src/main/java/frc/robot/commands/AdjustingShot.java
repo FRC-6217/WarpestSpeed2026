@@ -27,7 +27,7 @@ public class AdjustingShot extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooter.setShooter(-(0.0007234557 * Math.pow(swerveDrivetrain.distanceToHubMeters(),3) + (-0.03075449)*Math.pow(swerveDrivetrain.distanceToHubMeters(),2)+(0.1950242)*swerveDrivetrain.distanceToHubMeters()+(0.1443406)));
+    shooter.setShooter(shooter.shootingPolynomial(swerveDrivetrain.distanceToHubMeters()));
   }
 
   // Called once the command ends or is interrupted.

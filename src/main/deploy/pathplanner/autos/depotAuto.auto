@@ -5,9 +5,21 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "lowerIntake"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "OutpostTrenchStartToCenter"
+            "pathName": "DepotTrenchStartToCenter"
           }
         },
         {
@@ -19,13 +31,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "OutpostCenterToCenterIntake"
+            "pathName": "DepotCenterToCenterIntake"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "OutpostCenterIntakeToOutpostCenter"
+            "pathName": "DepotCenterIntakeToDepotCenter"
           }
         },
         {
@@ -37,31 +49,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "OutpostCenterToOutpostShoot"
+            "pathName": "DepotCenterToDepotShoot"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "shootBall"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "OutpostShootToCenter"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "intakeFuel"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "OutpostCenterToCenterIntakeTwo"
           }
         }
       ]

@@ -23,7 +23,13 @@ public class ResetGyro extends Command {
   @Override
   public void initialize() {
     swerveDrivetrain.resetRotation(new Rotation2d(0));
-    //swerveDrivetrain.setOperatorPerspectiveForward(new Rotation2d(0));
+    // swerveDrivetrain.setOperatorPerspectiveForward(new Rotation2d(0));
+    // if(swerveDrivetrain.getDriverStation() == DriverStation.Alliance.Blue) {
+    //   swerveDrivetrain.resetRotation(new Rotation2d(0));
+    // } else if(swerveDrivetrain.getDriverStation() == DriverStation.Alliance.Red) {
+    //   swerveDrivetrain.resetRotation(new Rotation2d(Math.PI));
+    // }
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.

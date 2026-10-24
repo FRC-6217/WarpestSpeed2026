@@ -42,7 +42,7 @@ public class Robot extends TimedRobot {
 
             LimelightHelpers.SetRobotOrientation(Constants.frontLimelightName, headingDeg, 0, 0, 0, 0, 0);
             LimelightHelpers.SetRobotOrientation(Constants.leftLimelightName, headingDeg, 0, 0, 0, 0, 0);
-            LimelightHelpers.SetRobotOrientation(Constants.rightLimelightName, headingDeg, 0, 0, 0, 0, 0);
+            //LimelightHelpers.SetRobotOrientation(Constants.rightLimelightName, headingDeg, 0, 0, 0, 0, 0);
 
             //LimelightHelpers.SetIMUMode(Constants.frontLimelightName,3);
 
@@ -58,10 +58,10 @@ public class Robot extends TimedRobot {
                 m_robotContainer.swerveDrivetrain.addVisionMeasurement(leftLLMeasurement.pose, leftLLMeasurement.timestampSeconds);
             }
 
-            var rightLLMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(Constants.rightLimelightName);
-            if (rightLLMeasurement != null && rightLLMeasurement.tagCount > 0 && Math.abs(omegaRps) < 2.0 && translationMps < 1.25) {
-                m_robotContainer.swerveDrivetrain.addVisionMeasurement(rightLLMeasurement.pose, rightLLMeasurement.timestampSeconds);
-            }
+            // var rightLLMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(Constants.rightLimelightName);
+            // if (rightLLMeasurement != null && rightLLMeasurement.tagCount > 0 && Math.abs(omegaRps) < 2.0 && translationMps < 1.25) {
+            //     m_robotContainer.swerveDrivetrain.addVisionMeasurement(rightLLMeasurement.pose, rightLLMeasurement.timestampSeconds);
+            // }
         }
     }
 

@@ -28,22 +28,22 @@ public class Constants {
    //Motor id
    public static final int climberMotorId = 32;
    public static final int indexerMotorId = 36;
-   public static final int intakeMotorId = 39;
+   public static final int intakeMotorId = 15;
    public static final int intakeMoverMotorId = 35;
    public static final int shooterMotorId = 16;
    public static final int agitatorMotorId = 0;
 
    //Motor speed
    public static final double intakeMotorSpeed = -0.6;
-   public static final double intakeMoverMotorSpeed = 0.1;
-   public static final double shooterMotorSpeed= -0.50;
+   public static final double intakeMoverMotorSpeed = 0.2;
+   public static final double shooterMotorSpeed= -0.30;
    public static final double indexerMotorSpeed = -0.5;
    public static final double climberMotorSpeed = -0.5;
    public static final double agitatorMotorSpeed = 0.4;
 
    public static final double maxKrakenMotorSpeedRps = 100;
-   public static final double intakeUpEncoderValue = 0.79;
-   public static final double intakeDownEncoderValue = 0.97;
+   public static final double intakeUpEncoderValue = 0.16;
+   public static final double intakeDownEncoderValue = 0.58;
   }
 
    public static final double blueHubX = 4.625;

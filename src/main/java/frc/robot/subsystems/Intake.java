@@ -18,13 +18,13 @@ import frc.robot.Constants;
 import frc.robot.Constants.RobotConstants;
 
 public class Intake extends SubsystemBase {
-    public static enum IntakeState{
+   public static enum IntakeState{
     intakeUp,
     intakeDown,
     neutral,
   }
 
-  SparkFlex intakeMotor = new SparkFlex(RobotConstants.intakeMotorId, MotorType.kBrushless);
+  TalonFX intakeMotor = new TalonFX(RobotConstants.intakeMotorId);
   TalonFX intakeMoverMotor = new TalonFX(RobotConstants.intakeMoverMotorId);
   DutyCycleEncoder intakeMoverEncoder = new DutyCycleEncoder(0);
   boolean runningForwardIntake = false;
@@ -49,16 +49,18 @@ public class Intake extends SubsystemBase {
     if(intakeState == IntakeState.neutral) {
       intakeMoverMotor.stopMotor();
     } else if(intakeState == IntakeState.intakeUp) {
+      
       if(intakeMoverEncoder.get() > RobotConstants.intakeUpEncoderValue) {
         intakeMoverMotor.set(RobotConstants.intakeMoverMotorSpeed);
       } else {
-        intakeState =IntakeState.neutral;
+        intakeState = IntakeState.neutral;
       }
     } else if(intakeState == IntakeState.intakeDown) {
+        
       if(intakeMoverEncoder.get() < RobotConstants.intakeDownEncoderValue) {
         intakeMoverMotor.set(-RobotConstants.intakeMoverMotorSpeed);
       } else {
-        intakeState =IntakeState.neutral;
+        intakeState = IntakeState.neutral;
       }
     }
   }
@@ -78,7 +80,7 @@ public class Intake extends SubsystemBase {
   }
 
   public void intakeUp() {
-    // intakeMoverMotor.set(SmartDashboard.getNumber("Intake mover speed ", RobotConstants.intakeMoverMotorSpeed));
+     //intakeMoverMotor.set(SmartDashboard.getNumber("Intake mover speed ", RobotConstants.intakeMoverMotorSpeed));
     intakeState = IntakeState.intakeUp;
   }
 
@@ -89,6 +91,7 @@ public class Intake extends SubsystemBase {
 
   public void stopIntakeMover() {
     intakeMoverMotor.stopMotor();
+    intakeState = IntakeState.neutral;
   }
 
   public void toggleIntake() {

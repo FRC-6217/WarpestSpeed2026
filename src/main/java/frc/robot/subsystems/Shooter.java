@@ -70,7 +70,6 @@ public class Shooter extends SubsystemBase {
   }
 
   public void startShooter() {
-    //runningShooter = true;
     shooterSetpoint = SmartDashboard.getNumber("Shooter speed ", RobotConstants.shooterMotorSpeed);
     topPIDController.setSetpoint(SmartDashboard.getNumber("Shooter speed ", RobotConstants.shooterMotorSpeed));
     runningShooter = true;
@@ -89,6 +88,10 @@ public class Shooter extends SubsystemBase {
   }
   
   public boolean shooterIsAtSpeed() {
-    return Math.abs(shooterMotor.getVelocity().getValueAsDouble()) >= Math.abs(topPIDController.getSetpoint() * 0.95);
+    return Math.abs(shooterMotor.getVelocity().getValueAsDouble()) >= Math.abs(topPIDController.getSetpoint() * 0.98);
+  }
+
+  public double shootingPolynomial(double distance){
+    return -(0.0007234557 * Math.pow(distance,3) + (-0.03075449)*Math.pow(distance,2)+(0.1950242)*distance+(0.1303406));
   }
 }

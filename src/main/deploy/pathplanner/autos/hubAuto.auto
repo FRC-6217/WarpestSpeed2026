@@ -11,6 +11,12 @@
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "intakeFuel"
@@ -25,7 +31,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 2.0
           }
         },
         {
@@ -41,45 +47,21 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "shootBall"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "intakeFuel"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "depotShotToDepotIntake"
-          }
-        },
-        {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "DepotTwoIntakeToDepotShot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "stopIntake"
+            "waitTime": 0.2
           }
         },
         {
           "type": "named",
           "data": {
             "name": "shootBall"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "SpinAtDepotShot"
           }
         }
       ]
