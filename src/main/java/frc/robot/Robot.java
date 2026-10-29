@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.subsystems.LimelightHelpers;
 
 public class Robot extends TimedRobot {
     private Command m_autonomousCommand;
@@ -33,36 +32,7 @@ public class Robot extends TimedRobot {
         m_timeAndJoystickReplay.update();
         CommandScheduler.getInstance().run(); 
 
-        if (kUseLimelight) {
-            var driveState = m_robotContainer.swerveDrivetrain.getState();
-            double headingDeg = driveState.Pose.getRotation().getDegrees();
-            double omegaRps = Units.radiansToRotations(driveState.Speeds.omegaRadiansPerSecond);
-            double translationMps = Math.sqrt(Math.pow((driveState.Speeds.vxMetersPerSecond), 2) 
-                                                + Math.pow((driveState.Speeds.vyMetersPerSecond), 2));
-
-            LimelightHelpers.SetRobotOrientation(Constants.frontLimelightName, headingDeg, 0, 0, 0, 0, 0);
-            LimelightHelpers.SetRobotOrientation(Constants.leftLimelightName, headingDeg, 0, 0, 0, 0, 0);
-            //LimelightHelpers.SetRobotOrientation(Constants.rightLimelightName, headingDeg, 0, 0, 0, 0, 0);
-
-            //LimelightHelpers.SetIMUMode(Constants.frontLimelightName,3);
-
-            //m_robotContainer.swerveDrivetrain.setVisionMeasurementStdDevs();
-
-            var frontLLMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(Constants.frontLimelightName);
-            if (frontLLMeasurement != null && frontLLMeasurement.tagCount > 0 && Math.abs(omegaRps) < 2.0 && translationMps < 1.25) {
-                m_robotContainer.swerveDrivetrain.addVisionMeasurement(frontLLMeasurement.pose, frontLLMeasurement.timestampSeconds);
-            }
-
-            var leftLLMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(Constants.leftLimelightName);
-            if (leftLLMeasurement != null && leftLLMeasurement.tagCount > 0 && Math.abs(omegaRps) < 2.0 && translationMps < 1.25) {
-                m_robotContainer.swerveDrivetrain.addVisionMeasurement(leftLLMeasurement.pose, leftLLMeasurement.timestampSeconds);
-            }
-
-            // var rightLLMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(Constants.rightLimelightName);
-            // if (rightLLMeasurement != null && rightLLMeasurement.tagCount > 0 && Math.abs(omegaRps) < 2.0 && translationMps < 1.25) {
-            //     m_robotContainer.swerveDrivetrain.addVisionMeasurement(rightLLMeasurement.pose, rightLLMeasurement.timestampSeconds);
-            // }
-        }
+        
     }
 
     public void cancelAll() {
@@ -76,7 +46,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledPeriodic() {
-        LimelightHelpers.SetIMUMode(Constants.frontLimelightName,1);
+        
     }
 
     @Override
@@ -84,11 +54,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
-        m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
-        if (m_autonomousCommand != null) {
-            CommandScheduler.getInstance().schedule(m_autonomousCommand);
-        }
+        
     }
 
     @Override
@@ -102,18 +68,14 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
-        if (m_autonomousCommand != null) {
-            CommandScheduler.getInstance().cancel(m_autonomousCommand);
-            CommandScheduler.getInstance().schedule(Commands.runOnce(m_robotContainer.shooter:: stop, m_robotContainer.shooter));
-        }
-        
+                
     }
 
     @Override
     public void teleopPeriodic() {
-        if (m_robotContainer.m_driverController.a().getAsBoolean()) {
-            CommandScheduler.getInstance().cancelAll();
-        }
+        // if (m_robotContainer.m_driverController.a().getAsBoolean()) {
+        //     CommandScheduler.getInstance().cancelAll();
+        // }
     }
 
     @Override

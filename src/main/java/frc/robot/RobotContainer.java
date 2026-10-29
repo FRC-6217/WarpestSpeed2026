@@ -21,33 +21,23 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.AdjustingShot;
-import frc.robot.commands.Agitate;
-import frc.robot.commands.AlineWait;
-import frc.robot.commands.ClimbingCommand;
-import frc.robot.commands.IndexerCommand;
 import frc.robot.commands.IntakeCommand;
-import frc.robot.commands.PIDShooter;
-import frc.robot.commands.ResetGyro;
-import frc.robot.commands.ShootBall;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.generated.TunerConstants;
-import frc.robot.subsystems.Agitator;
-import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Indexer;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.IntakeAndShooter;
 import frc.robot.subsystems.MotorOpperator;
-import frc.robot.subsystems.Shooter;
 
 public class RobotContainer {
-    private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
-    private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
+    private double MaxSpeed = .60 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
+    private double MaxAngularRate = 0.6* RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
 
     private final SendableChooser<Command> autoChooser;
    
@@ -60,22 +50,18 @@ public class RobotContainer {
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
     
 
-    private final Telemetry logger = new Telemetry(MaxSpeed);
 
-    public final Climber climber = new Climber();
-    public final Intake intake = new Intake();
-    public final Shooter shooter = new Shooter();
-    public final Indexer indexer = new Indexer();
-    //public final Agitator agitator = new Agitator();
+    public final Indexer idx = new Indexer();
+    public final IntakeAndShooter inoter = new IntakeAndShooter();
+    
 
-    public final MotorOpperator shooterMotor = new MotorOpperator(41);
-    public final MotorOpperator indexMotor = new MotorOpperator(42);
+
 
     public final SlewRateLimiter tranXSlewRateLimiter = new SlewRateLimiter(6.3);
     public final SlewRateLimiter tranYSlewRateLimiter = new SlewRateLimiter(6.3);
     public final SlewRateLimiter rotSlewRateLimiter = new SlewRateLimiter(13);
 
-    public final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
+    public final CommandJoystick m_driverController = new CommandJoystick(OperatorConstants.kDriverControllerPort);
     private final CommandXboxController m_gameOperatorController = new CommandXboxController(OperatorConstants.kOperatorControllerPort);
 
 
@@ -85,40 +71,20 @@ public class RobotContainer {
   
 
     public final Command driveCommand =  swerveDrivetrain.applyRequest(() ->
-                drive.withVelocityX(-tranXSlewRateLimiter.calculate(m_driverController.getLeftY() * MaxSpeed * swerveDrivetrain.governor.getGovernor())) // Drive forward with negative Y (forward)
-                    .withVelocityY(-tranYSlewRateLimiter.calculate(m_driverController.getLeftX() * MaxSpeed * swerveDrivetrain.governor.getGovernor())) // Drive left with negative X (left)
-                    .withRotationalRate(-rotSlewRateLimiter.calculate(m_driverController.getRightX() * MaxAngularRate * swerveDrivetrain.governor.getGovernor())) // Drive counterclockwise with negative X (left)
+                drive.withVelocityX(-tranXSlewRateLimiter.calculate(m_driverController.getY() * MaxSpeed * swerveDrivetrain.governor.getGovernor())) // Drive forward with negative Y (forward)
+                    .withVelocityY(-tranYSlewRateLimiter.calculate(m_driverController.getX() * MaxSpeed * swerveDrivetrain.governor.getGovernor())) // Drive left with negative X (left)
+                    .withRotationalRate(-rotSlewRateLimiter.calculate(m_driverController.getZ() * MaxAngularRate * swerveDrivetrain.governor.getGovernor())) // Drive counterclockwise with negative X (left)
             );
 
     public RobotContainer() {
         configureBindings();
 
-        //NamedCommands.registerCommand("printWhenDone", Commands.print("I am done with pathplanner auto"));
-        //NamedCommands.registerCommand("shootBall", new ShootBall(indexMotor, shooterMotor));
-        NamedCommands.registerCommand("intakeFuel", Commands.runOnce(intake::forwardIntakeOn, intake));
-        NamedCommands.registerCommand("stopIntake", Commands.runOnce(intake::stopIntake, intake).alongWith(Commands.runOnce(indexer::stop, indexer)));
-        NamedCommands.registerCommand("shootBall", new ShootBall(indexer, shooter, swerveDrivetrain));
-        NamedCommands.registerCommand("stopShootBall", Commands.runOnce(indexer::stop, indexer));
-        NamedCommands.registerCommand("startShooter", Commands.runOnce(shooter::startShooter, shooter));
-        NamedCommands.registerCommand("stopShooter", Commands.runOnce(shooter::stop, shooter));
-        NamedCommands.registerCommand("climb", new ClimbingCommand(climber));
-        NamedCommands.registerCommand("lowerIntake", Commands.runOnce(intake::intakeDown, intake));
-        NamedCommands.registerCommand("raiseIntake", Commands.runOnce(intake::intakeUp, intake));
-        //NamedCommands.registerCommand("alineToHub", Commands.runOnce(swerveDrivetrain::alineToHub, swerveDrivetrain));
-        NamedCommands.registerCommand("alineWait", new AlineWait(swerveDrivetrain));
+       
 
           // Build an auto chooser. This will use Commands.none() as the default option.
         autoChooser = AutoBuilder.buildAutoChooser();
         
-        autoChooser.addOption("test", new PathPlannerAuto("test"));
-        //autoChooser.addOption("FirstAuto", new PathPlannerAuto("FirstAuto"));
-        autoChooser.addOption("averysauto", new PathPlannerAuto("averysauto"));
-        autoChooser.addOption("hubAuto", new PathPlannerAuto("hubAuto"));
-        autoChooser.addOption("outpostAuto", new PathPlannerAuto("outpostAuto"));
-        autoChooser.addOption("depotAuto", new PathPlannerAuto("depotAuto"));
-        autoChooser.addOption("hubBackup", new PathPlannerAuto("hubBackup"));
-        autoChooser.addOption("outpostBackup", new PathPlannerAuto("outpostBackup"));
-        //autoChooser.addOption("goToMiddleAndPushBall", new PathPlannerAuto("goCenterAndPushBall"));
+       
         
 
         // Another option that allows you to specify the default auto by its name
@@ -135,13 +101,14 @@ public class RobotContainer {
         swerveDrivetrain.setDefaultCommand(
             //swerveDrivetrain will execute this command periodically
            swerveDrivetrain.applyRequest(() ->
-                drive.withVelocityX(-tranXSlewRateLimiter.calculate(m_driverController.getLeftY() * MaxSpeed * swerveDrivetrain.governor.getGovernor())) // Drive forward with negative Y (forward)
-                    .withVelocityY(-tranYSlewRateLimiter.calculate(m_driverController.getLeftX() * MaxSpeed * swerveDrivetrain.governor.getGovernor())) // Drive left with negative X (left)
-                    .withRotationalRate(-rotSlewRateLimiter.calculate(m_driverController.getRightX() * MaxAngularRate * swerveDrivetrain.governor.getGovernor())) // Drive counterclockwise with negative X (left)
+                drive.withVelocityX(-tranXSlewRateLimiter.calculate(m_driverController.getY() * MaxSpeed * swerveDrivetrain.governor.getGovernor())) // Drive forward with negative Y (forward)
+                    .withVelocityY(-tranYSlewRateLimiter.calculate(m_driverController.getX() * MaxSpeed * swerveDrivetrain.governor.getGovernor())) // Drive left with negative X (left)
+                    .withRotationalRate(-rotSlewRateLimiter.calculate(m_driverController.getZ() * MaxAngularRate * swerveDrivetrain.governor.getGovernor())) // Drive counterclockwise with negative X (left)
             )
             
         );
 
+        
         // Idle while the robot is disabled. This ensures the configured
         // neutral mode is applied to the drive motors while disabled.
         final var idle = new SwerveRequest.Idle();
@@ -150,60 +117,59 @@ public class RobotContainer {
         );
 
 
-        Trigger driverBackLeft = m_driverController.button(Constants.OperatorConstants.kLeftBackButton);
-        Trigger driverBackRight = m_driverController.button(Constants.OperatorConstants.kRightBackButton);
-        Trigger slowMode = m_driverController.leftBumper();
-        Trigger fastMode = m_driverController.rightBumper();
-        Trigger reduceSpeed = m_driverController.axisGreaterThan(Constants.OperatorConstants.leftTriggerAxis,.6);
-        Trigger increaseSpeed = m_driverController.axisGreaterThan(Constants.OperatorConstants.rightTriggerAxis,.6);
-        Trigger driverRightBack = m_driverController.button(Constants.OperatorConstants.kRightBackButton);
-        Trigger resetDriverGyro = m_driverController.button(Constants.OperatorConstants.kLeftBackButton);
+        // Trigger driverBackLeft = m_driverController.button(Constants.OperatorConstants.kLeftBackButton);
+        // Trigger driverBackRight = m_driverController.button(Constants.OperatorConstants.kRightBackButton);
+        // Trigger slowMode = m_driverController.leftBumper();
+        // Trigger fastMode = m_driverController.rightBumper();
+        // Trigger reduceSpeed = m_driverController.axisGreaterThan(Constants.OperatorConstants.leftTriggerAxis,.6);
+        // Trigger increaseSpeed = m_driverController.axisGreaterThan(Constants.OperatorConstants.rightTriggerAxis,.6);
+        // Trigger driverRightBack = m_driverController.button(Constants.OperatorConstants.kRightBackButton);
+        // Trigger resetDriverGyro = m_driverController.button(Constants.OperatorConstants.kLeftBackButton);
 
 
-        slowMode.onTrue(Commands.runOnce(swerveDrivetrain.governor::setSlowMode, swerveDrivetrain));
-        fastMode.onTrue(Commands.runOnce(swerveDrivetrain.governor::setFastMode, swerveDrivetrain));
-        reduceSpeed.onTrue(Commands.runOnce(swerveDrivetrain.governor::decrement, swerveDrivetrain));
-        increaseSpeed.onTrue(Commands.runOnce(swerveDrivetrain.governor::increment, swerveDrivetrain));
+        // slowMode.onTrue(Commands.runOnce(swerveDrivetrain.governor::setSlowMode, swerveDrivetrain));
+        // fastMode.onTrue(Commands.runOnce(swerveDrivetrain.governor::setFastMode, swerveDrivetrain));
+        //  reduceSpeed.onTrue(Commands.runOnce(swerveDrivetrain.governor::decrement, swerveDrivetrain));
+        // increaseSpeed.onTrue(Commands.runOnce(swerveDrivetrain.governor::increment, swerveDrivetrain));
 
         
 
-        resetDriverGyro.whileTrue(new ResetGyro(swerveDrivetrain));
+        // resetDriverGyro.whileTrue(new ResetGyro(swerveDrivetrain));
         
         // m_driverController.b().whileTrue(swerveDrivetrain.applyRequest(() ->
         //     point.withModuleDirection(new Rotation2d(-m_driverController.getLeftY(), -m_driverController.getLeftX()))
         // ));
         //m_driverController.b().whileTrue(new Agitate(agitator));
 
-        m_driverController.x().toggleOnTrue(swerveDrivetrain.applyRequest(() -> allineRot.withTargetDirection(new Rotation2d(swerveDrivetrain.allignedAngle()))
-                    .withVelocityX(-tranXSlewRateLimiter.calculate(m_driverController.getLeftY() * MaxSpeed * swerveDrivetrain.governor.getGovernor())) // Drive forward with negative Y (forward)
-                    .withVelocityY(-tranYSlewRateLimiter.calculate(m_driverController.getLeftX() * MaxSpeed * swerveDrivetrain.governor.getGovernor())) // Drive left with negative X (left)
-                    .withHeadingPID(5, 0, 0)));
-        m_driverController.b().toggleOnTrue(new ShooterCommand(shooter));
+        // m_driverController.x().toggleOnTrue(swerveDrivetrain.applyRequest(() -> allineRot.withTargetDirection(new Rotation2d(swerveDrivetrain.allignedAngle()))
+        //             .withVelocityX(-tranXSlewRateLimiter.calculate(m_driverController.getLeftY() * MaxSpeed * swerveDrivetrain.governor.getGovernor())) // Drive forward with negative Y (forward)
+        //             .withVelocityY(-tranYSlewRateLimiter.calculate(m_driverController.getLeftX() * MaxSpeed * swerveDrivetrain.governor.getGovernor())) // Drive left with negative X (left)
+        //             .withHeadingPID(5, 0, 0)));
+        // m_driverController.b().toggleOnTrue(new ShooterCommand(shooter));
 
-        // Run SysId routines when holding back/start and X/Y.
-        // Note that each routine should be run exactly once in a single log.
-        m_driverController.back().and(m_driverController.y()).whileTrue(swerveDrivetrain.sysIdDynamic(Direction.kForward));
-        m_driverController.back().and(m_driverController.x()).whileTrue(swerveDrivetrain.sysIdDynamic(Direction.kReverse));
-        m_driverController.start().and(m_driverController.y()).whileTrue(swerveDrivetrain.sysIdQuasistatic(Direction.kForward));
-        m_driverController.start().and(m_driverController.x()).whileTrue(swerveDrivetrain.sysIdQuasistatic(Direction.kReverse));
+        // // Run SysId routines when holding back/start and X/Y.
+        // // Note that each routine should be run exactly once in a single log.
+        // m_driverController.back().and(m_driverController.y()).whileTrue(swerveDrivetrain.sysIdDynamic(Direction.kForward));
+        // m_driverController.back().and(m_driverController.x()).whileTrue(swerveDrivetrain.sysIdDynamic(Direction.kReverse));
+        // m_driverController.start().and(m_driverController.y()).whileTrue(swerveDrivetrain.sysIdQuasistatic(Direction.kForward));
+        // m_driverController.start().and(m_driverController.x()).whileTrue(swerveDrivetrain.sysIdQuasistatic(Direction.kReverse));
 
-       swerveDrivetrain.registerTelemetry(logger::telemeterize);
-
+       
 
          //m_gameOperatorController.x().whileTrue(new RunMotor(shooterMotor, 0.8));
          //m_gameOperatorController.y().whileTrue(new RunMotor(indexMotor, -0.5));
-        m_gameOperatorController.y().whileTrue(new IntakeCommand(intake));
-        m_gameOperatorController.b().whileTrue(Commands.runOnce(intake::backwardIntakeOn, intake)).onFalse(Commands.runOnce(intake::stopIntake, intake));
-        m_gameOperatorController.x().toggleOnTrue(new PIDShooter(swerveDrivetrain, shooter));
-        m_gameOperatorController.a().whileTrue(new IndexerCommand(indexer, shooter));
-        m_gameOperatorController.povUp().whileTrue(Commands.runOnce(intake::intakeUp, intake)).onFalse(Commands.runOnce(intake::stopIntakeMover, intake));
-        m_gameOperatorController.povDown().onTrue(Commands.runOnce(intake::intakeDown, intake));
-        m_gameOperatorController.rightBumper().whileTrue(new ShooterCommand(shooter));
-        m_gameOperatorController.leftBumper().whileTrue(Commands.runOnce(intake::intakeDown, intake)).onFalse(Commands.runOnce(intake::stopIntakeMover, intake));
+        m_driverController.button(2).whileTrue(new IntakeCommand(inoter, idx));
+        //m_gameOperatorController.b().whileTrue(Commands.runOnce(intake::backwardIntakeOn, intake)).onFalse(Commands.runOnce(intake::stopIntake, intake));
+        //m_gameOperatorController.x().toggleOnTrue(new PIDShooter(swerveDrivetrain, shooter));
+       // m_gameOperatorController.povUp().whileTrue(Commands.runOnce(intake::intakeUp, intake)).onFalse(Commands.runOnce(intake::stopIntakeMover, intake));
+        //m_gameOperatorController.povDown().onTrue(Commands.runOnce(intake::intakeDown, intake));
+        m_driverController.button(1).whileTrue(new ShooterCommand(inoter,idx));
+        //m_gameOperatorController.leftBumper().whileTrue(Commands.runOnce(intake::intakeDown, intake)).onFalse(Commands.runOnce(intake::stopIntakeMover, intake));
         // Reset the field-centric heading on left bumper press.
     }
 
-    public Command getAutonomousCommand() {
+    public Command getAutonomousCommand() { 
+
         // Simple drive forward auton
         // final var idle = new SwerveRequest.Idle();
         // return Commands.sequence(
@@ -223,6 +189,6 @@ public class RobotContainer {
 
 
         // Build an auto chooser. This will use Commands.none() as the default option.
-        return autoChooser.getSelected();
+        return null;
     }
 }

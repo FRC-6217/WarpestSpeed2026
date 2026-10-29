@@ -4,39 +4,31 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.hardware.TalonFX;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.Constants.RobotConstants;
 
 public class Indexer extends SubsystemBase {
-  TalonFX indexerMotor = new TalonFX(RobotConstants.indexerMotorId);
-
   /** Creates a new Indexer. */
-  public Indexer() {
-    SmartDashboard.putNumber("IndexerSpeed ", RobotConstants.indexerMotorSpeed);
-  }
+
+  SparkMax idxMoter = new SparkMax(42, MotorType.kBrushless);
+
+  public Indexer() {}
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
   }
 
-  public void setSpeed(double speed) {
-    indexerMotor.set(speed);
+  public void idxMoterIn(){
+    idxMoter.set(Constants.idxSpeed);
   }
-
-  public void startIndexer() {
-    indexerMotor.set(SmartDashboard.getNumber("IndexerSpeed ", 0));
+  public void idxMoterOut(){
+    idxMoter.set(-Constants.idxSpeed);
   }
-
-  public void backwardIndexer() {
-    indexerMotor.set(-SmartDashboard.getNumber("IndexerSpeed ", 0));
-  }
-  
-  public void stop() {
-    indexerMotor.stopMotor();
+  public void idxMoterOff(){
+    idxMoter.stopMotor();
   }
 }

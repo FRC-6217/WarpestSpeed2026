@@ -50,4 +50,7 @@ public class Constants {
    public static final double blueHubY = 4.117;
    public static final double redHubX = 11.915;
    public static final double redHubY = 4.117;
+public static double intakeSpeed = .4;
+public static double shooterSpeed = .6;
+public static double idxSpeed = .4;
 }
